@@ -1,8 +1,8 @@
 #### Preamble ####
-# Purpose: Tests the structure and validity of the simulated Australian 
-  #electoral divisions dataset.
-# Author: Rohan Alexander
-# Date: 26 September 2024
+# Purpose: Tests the structure and validity of the datasets about the German 
+# bombing of England during the Second World War. 
+# Author: Dennis Netchitailo
+# Date: 27 November 2024
 # Contact: rohan.alexander@utoronto.ca
 # License: MIT
 # Pre-requisites: 
