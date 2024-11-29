@@ -31,8 +31,9 @@ library(readr)
 
 # Choose a directory on your computer to be the location of the .zip file
 # Insert the path of the directory where you want to save the .zip file
-#source_folder = ""
-source_folder = "C:/Users/Dennis Netchitailo/Downloads/data-master/britain-bombing-ww2"
+#source_folder = "C:/Users/Dennis Netchitailo/Downloads/data-master/britain-bombing-ww2"
+source_folder = "C:/Users/Dennis Netchitailo/Downloads"
+combined_path <- file.path(source_folder, "data-master/britain-bombing-ww2")
 
 
 # Download the .zip file
@@ -41,10 +42,10 @@ usethis::use_course(
   url = 'https://github.com/tacookson/data/archive/refs/heads/master.zip',
   destdir = source_folder)
 
-source_csv_bombings <- file.path(source_folder, "bombings.csv")
+source_csv_bombings <- file.path(combined_path, "bombings.csv")
 target_csv_bombings <- read.csv(source_csv_bombings) # Read the CSV file into R
 
-source_csv_casualties <- file.path(source_folder, "casualties.csv")
+source_csv_casualties <- file.path(combined_path, "casualties.csv")
 target_csv_casualties <- read.csv(source_csv_casualties) # Read the CSV file into R
 
 
