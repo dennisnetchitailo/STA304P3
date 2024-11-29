@@ -4,7 +4,10 @@
 # Date: 27 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca
 # License: --
-# Pre-requisites: Download the `usethis`, `tidyverse`, and `readr` libraries
+# Pre-requisites: 
+  # - The `usethis` package must be installed and loaded
+  # - The `tidyverse` package must be installed and loaded
+  # - The `readr` package must be installed and loaded
 
 
 #### Workspace setup ####
