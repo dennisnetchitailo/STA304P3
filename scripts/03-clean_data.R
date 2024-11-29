@@ -7,12 +7,12 @@
 # Pre-requisites: 
   # - 02-download_data.R must have been run
   # - The `tidyverse` package must be installed and loaded
-  # - The `readr` package must be installed and loaded
+  # - The `arrow` package must be installed and loaded
 # Any other information needed? [...UPDATE THIS...]
 
 #### Workspace setup ####
 library(tidyverse)
-
+library(arrow)
 #### Clean data ####
 raw_data <- read_csv("inputs/data/plane_data.csv")
 
