@@ -1,6 +1,6 @@
 #### Preamble ####
 # Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Dennis Nethitailo
+# Author: Dennis Netchitailo
 # Date: November 29, 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
 # License: --
@@ -14,7 +14,22 @@
 library(tidyverse)
 library(arrow)
 #### Clean data ####
+#source_folder = "" #Insert path here
+source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
+combined_path <- file.path(source_folder, "data/01-raw_data/bombings_data.csv")
+
+
+
+csv_data <- read.csv("/data/01-raw_data/bombings_data.csv")
+
+
 raw_data <- read_csv("inputs/data/plane_data.csv")
+
+#write_parquet(data, "path/to/save/cleaned_data.parquet")
+
+
+
+
 
 cleaned_data <-
   raw_data |>
