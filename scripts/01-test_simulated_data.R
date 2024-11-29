@@ -3,7 +3,7 @@
 # bombing of England during the Second World War. 
 # Author: Dennis Netchitailo
 # Date: 27 November 2024
-# Contact: rohan.alexander@utoronto.ca
+# Contact: dennis.netchitailo@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: 
   # - The `tidyverse` package must be installed and loaded
@@ -26,46 +26,37 @@ if (exists("analysis_data")) {
 
 #### Test data ####
 
-# Check if the dataset has 151 rows
-if (nrow(analysis_data) == 151) {
-  message("Test Passed: The dataset has 151 rows.")
+
+
+# Check if the dataset has 32514 rows
+if (nrow(analysis_data) == 32514) {
+  message("Test Passed: The dataset has 32514 rows.")
 } else {
-  stop("Test Failed: The dataset does not have 151 rows.")
+  stop("Test Failed: The dataset does not have 32514 rows.")
 }
 
-# Check if the dataset has 3 columns
-if (ncol(analysis_data) == 3) {
-  message("Test Passed: The dataset has 3 columns.")
+# Check if the dataset has 4 columns
+if (ncol(analysis_data) == 4) {
+  message("Test Passed: The dataset has 4 columns.")
 } else {
-  stop("Test Failed: The dataset does not have 3 columns.")
+  stop("Test Failed: The dataset does not have 4 columns.")
 }
 
-# Check if all values in the 'division' column are unique
-if (n_distinct(analysis_data$division) == nrow(analysis_data)) {
-  message("Test Passed: All values in 'division' are unique.")
+# Check if the 'location' column contains only valid locations of England's cities
+valid_cities <- c("London", "Manchester", "Liverpool", "Birmingham", "Coventry")
+
+if (all(analysis_data$location %in% valid_cities)) {
+  message("Test Passed: The 'location' column contains only valid English city names.")
 } else {
-  stop("Test Failed: The 'division' column contains duplicate values.")
+  stop("Test Failed: The 'location' column contains invalid city names.")
 }
 
-# Check if the 'state' column contains only valid Australian state names
-valid_states <- c("New South Wales", "Victoria", "Queensland", "South Australia", 
-                  "Western Australia", "Tasmania", "Northern Territory", 
-                  "Australian Capital Territory")
+# Check no negative casualties figures
+all(analysis_data$casualties >= 0) == TRUE
 
-if (all(analysis_data$state %in% valid_states)) {
-  message("Test Passed: The 'state' column contains only valid Australian state names.")
-} else {
-  stop("Test Failed: The 'state' column contains invalid state names.")
-}
-
-# Check if the 'party' column contains only valid party names
-valid_parties <- c("Labor", "Liberal", "Greens", "National", "Other")
-
-if (all(analysis_data$party %in% valid_parties)) {
-  message("Test Passed: The 'party' column contains only valid party names.")
-} else {
-  stop("Test Failed: The 'party' column contains invalid party names.")
-}
+# Check date range
+all(simulated_bombing_data$date >= as.Date("1939-09-01") & 
+      simulated_bombing_data$date <= as.Date("1940-05-10")) == TRUE
 
 # Check if there are any missing values in the dataset
 if (all(!is.na(analysis_data))) {
@@ -74,16 +65,44 @@ if (all(!is.na(analysis_data))) {
   stop("Test Failed: The dataset contains missing values.")
 }
 
-# Check if there are no empty strings in 'division', 'state', and 'party' columns
-if (all(analysis_data$division != "" & analysis_data$state != "" & analysis_data$party != "")) {
-  message("Test Passed: There are no empty strings in 'division', 'state', or 'party'.")
+# Check if there are no empty strings in 'incident_id', 'date', and 'location', 
+# and 'casualties' columns
+if (all(analysis_data$incident_id != "" & analysis_data$date != "" & analysis_data$location != "" &
+        analysis_data$casualties != "")) {
+  message("Test Passed: There are no empty strings in 'incident_id', 'date', 
+          'location' or 'casualties' .")
 } else {
   stop("Test Failed: There are empty strings in one or more columns.")
 }
+#analysis_data$incident_id != "" & analysis_data$date != "" &
+
+# Define expected date range
+start_date <- as.Date("1939-09-01")
+end_date <- as.Date("1940-05-10")
+# Check if all dates are within range
+if (all(analysis_data$date >= start_date & analysis_data$date <= end_date)) {
+  message("Test Passed: All dates are within the expected range.")
+} else {
+  stop("Test Failed: Some dates fall outside the expected range.")
+}
+
+
+
+
+
+
+
 
 # Check if the 'party' column has at least two unique values
 if (n_distinct(analysis_data$party) >= 2) {
   message("Test Passed: The 'party' column contains at least two unique values.")
 } else {
   stop("Test Failed: The 'party' column contains less than two unique values.")
+  
+  
+  
+
+  
+  
+  
 }
