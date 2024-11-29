@@ -31,8 +31,7 @@ library(readr)
 
 # Choose a directory on your computer to be the location of the .zip file
 # Insert the path of the directory where you want to save the .zip file
-#source_folder = "C:/Users/Dennis Netchitailo/Downloads/data-master/britain-bombing-ww2"
-source_folder = "C:/Users/Dennis Netchitailo/Downloads"
+source_folder = "" #Insert path here
 combined_path <- file.path(source_folder, "data-master/britain-bombing-ww2")
 
 
