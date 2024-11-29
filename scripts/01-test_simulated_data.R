@@ -65,11 +65,11 @@ if (all(!is.na(analysis_data))) {
   stop("Test Failed: The dataset contains missing values.")
 }
 
-# Check if there are no empty strings in 'incident_id', 'date', and 'location', 
+# Check if there are no empty strings in 'incident_id', 'location', 
 # and 'casualties' columns
-if (all(analysis_data$incident_id != "" & analysis_data$date != "" & analysis_data$location != "" &
+if (all(analysis_data$incident_id != "" & analysis_data$location != "" &
         analysis_data$casualties != "")) {
-  message("Test Passed: There are no empty strings in 'incident_id', 'date', 
+  message("Test Passed: There are no empty strings in 'incident_id', 
           'location' or 'casualties' .")
 } else {
   stop("Test Failed: There are empty strings in one or more columns.")
@@ -86,23 +86,33 @@ if (all(analysis_data$date >= start_date & analysis_data$date <= end_date)) {
   stop("Test Failed: Some dates fall outside the expected range.")
 }
 
-
-
-
-
-
-
-
 # Check if the 'party' column has at least two unique values
-if (n_distinct(analysis_data$party) >= 2) {
-  message("Test Passed: The 'party' column contains at least two unique values.")
+if (n_distinct(analysis_data$location) >= 2) {
+  message("Test Passed: The 'location' column contains at least two unique values.")
 } else {
-  stop("Test Failed: The 'party' column contains less than two unique values.")
-  
-  
-  
-
-  
-  
-  
+  stop("Test Failed: The 'location' column contains less than two unique values.")
 }
+
+# Check for IQR outliers
+outliers <- analysis_data %>%
+  filter(casualties > 17) 
+if (nrow(outliers) == 0) {
+  message("Test Passed: No extreme outliers in 'casualties'.")
+} else {
+  warning("Outliers detected in 'casualties':", nrow(outliers))
+}
+
+# Check all incident IDs are unique
+if (n_distinct(analysis_data$incident_id) == nrow(analysis_data)) {
+  message("Test Passed: All 'incident_id' values are unique.")
+} else {
+  stop("Test Failed: Duplicate 'incident_id' values found.")
+}
+
+# Check no missing date values
+if (all(!is.na(analysis_data$date))) {
+  message("Test Passed: No missing dates in the dataset.")
+} else {
+  stop("Test Failed: Missing dates detected in the dataset.")
+}
+
