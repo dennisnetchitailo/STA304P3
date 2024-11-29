@@ -1,9 +1,8 @@
 #### Preamble ####
-# Purpose: Simulates a dataset of Australian electoral divisions, including the 
-  #state and party that won each division.
-# Author: Rohan Alexander
-# Date: 26 September 2024
-# Contact: rohan.alexander@utoronto.ca
+# Purpose: Simulates 
+# Author: Dennis Netchitailo
+# Date: 28 November 2024
+# Contact: dennis.netchitailo@mail.utoronto.ca
 # License: MIT
 # Pre-requisites: The `tidyverse` package must be installed
 # Any other information needed? Make sure you are in the `starter_folder` rproj
@@ -11,21 +10,38 @@
 
 #### Workspace setup ####
 library(tidyverse)
-set.seed(853)
-
+set.seed(1939)
 
 #### Simulate data ####
-# State names
-states <- c(
-  "New South Wales",
-  "Victoria",
-  "Queensland",
-  "South Australia",
-  "Western Australia",
-  "Tasmania",
-  "Northern Territory",
-  "Australian Capital Territory"
-)
+total_incidents = 32514
+num_casualties = 66000 + 220000 # ~ Dead + ~ Injured
+mean_casualties = num_casualties / total_incidents
+
+#Poisson Distribution Simulation
+simulated_casualties <- rpois(n = total_incidents, lambda = mean_casualties)
+
+# Verify Results
+total_simulated_casualties <- sum(simulated_casualties)
+mean_simulated_casualties <- mean(simulated_casualties)
+sd_simulated_casualties <- sd(simulated_casualties)
+
+# Output results
+cat("Total Simulated Casualties:", total_simulated_casualties, "\n")
+cat("Mean Simulated Casualties per Incident:", mean_simulated_casualties, "\n")
+cat("Standard Deviation of Simulated Casualties:", sd_simulated_casualties, "\n")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Political parties
 parties <- c("Labor", "Liberal", "Greens", "National", "Other")
