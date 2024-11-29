@@ -44,7 +44,7 @@ write_csv(target_csv_casualties, "data/01-raw_data/casualties_data.csv")
 
 # Go to the GitHub repository and manually download the .zip file 
 # Use the following link: https://github.com/tacookson/data
-# Location and open the .zip file
+# Locate and open the .zip file
 
 # (1) Locate and move the "bombings.csv" file to the raw_data folder in the 
 # project following the path: data/01-raw_data
