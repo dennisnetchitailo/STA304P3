@@ -48,11 +48,5 @@ cat("File saved at:", output_path, "\n")
 # Summary of casualties
 summary(simulated_bombing_data$casualties)
 
-#_______________________________________________________________________________
-
-# Verify Results
-#total_simulated_casualties <- sum(simulated_casualties)
-#mean_simulated_casualties <- mean(simulated_casualties)
-#sd_simulated_casualties <- sd(simulated_casualties)
 
 
