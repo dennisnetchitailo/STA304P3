@@ -23,9 +23,13 @@ library(readr)
 
 # (1) Locate and move the "bombings.csv" file to the raw_data folder in the 
 # project following the path: data/01-raw_data
+# Delete the "bombings_data.csv" file, and rename the "bombings.csv" file to
+# "bombings_data.csv"
 
 # (2) Locate and move the "casualties.csv" file to the raw_data folder in the 
 # project following the path: data/01-raw_data
+# Delete the "casualties_data.csv" file, and rename the "casualties.csv" file to
+# "casualties_data.csv"
 
 ## ___ Method #2 : Automatic* ## ___
 
