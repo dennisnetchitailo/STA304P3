@@ -15,23 +15,7 @@ library(readr)
 
 #### Download data ####
 
-## ___ *Method #1 : Manual* ## ___
-
-# Go to the GitHub repository and manually download the .zip file 
-# Use the following link: https://github.com/tacookson/data
-# Location and open the .zip file
-
-# (1) Locate and move the "bombings.csv" file to the raw_data folder in the 
-# project following the path: data/01-raw_data
-# Delete the "bombings_data.csv" file, and rename the "bombings.csv" file to
-# "bombings_data.csv"
-
-# (2) Locate and move the "casualties.csv" file to the raw_data folder in the 
-# project following the path: data/01-raw_data
-# Delete the "casualties_data.csv" file, and rename the "casualties.csv" file to
-# "casualties_data.csv"
-
-## ___ Method #2 : Automatic* ## ___
+## ___ Method #1 : Automatic* ## ___
 
 # Choose a directory on your computer to be the location of the .zip file
 # Insert the path of the directory where you want to save the .zip file
@@ -55,4 +39,19 @@ target_csv_casualties <- read.csv(source_csv_casualties) # Read the CSV file int
 #### Save data ####
 write_csv(target_csv_bombings, "data/01-raw_data/bombings_data.csv") 
 write_csv(target_csv_casualties, "data/01-raw_data/casualties_data.csv")
-         
+
+## ___ *Method #2 : Manual* ## ___
+
+# Go to the GitHub repository and manually download the .zip file 
+# Use the following link: https://github.com/tacookson/data
+# Location and open the .zip file
+
+# (1) Locate and move the "bombings.csv" file to the raw_data folder in the 
+# project following the path: data/01-raw_data
+# Delete the "bombings_data.csv" file, and rename the "bombings.csv" file to
+# "bombings_data.csv"
+
+# (2) Locate and move the "casualties.csv" file to the raw_data folder in the 
+# project following the path: data/01-raw_data
+# Delete the "casualties_data.csv" file, and rename the "casualties.csv" file to
+# "casualties_data.csv"
