@@ -4,8 +4,7 @@
 # Date: 27 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca
 # License: --
-# Pre-requisites: Download the "usethis" and "readr" libraries
-# Any other information needed? [...UPDATE THIS...]
+# Pre-requisites: Download the `usethis`, `tidyverse`, and `readr` libraries
 
 
 #### Workspace setup ####
