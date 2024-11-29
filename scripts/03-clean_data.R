@@ -1,10 +1,13 @@
 #### Preamble ####
 # Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 6 April 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
-# License: MIT
-# Pre-requisites: [...UPDATE THIS...]
+# Author: Dennis Nethitailo
+# Date: November 29, 2024
+# Contact: dennis.netchitailo@mail.utoronto.ca 
+# License: --
+# Pre-requisites: 
+  # - 02-download_data.R must have been run
+  # - The `tidyverse` package must be installed and loaded
+  # - The `readr` package must be installed and loaded
 # Any other information needed? [...UPDATE THIS...]
 
 #### Workspace setup ####
