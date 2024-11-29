@@ -4,7 +4,7 @@
 # Author: Dennis Netchitailo
 # Date: 27 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca
-# License: MIT
+# License: --
 # Pre-requisites: 
   # - The `tidyverse` package must be installed and loaded
   # - 00-simulate_data.R must have been run
@@ -25,8 +25,6 @@ if (exists("analysis_data")) {
 
 
 #### Test data ####
-
-
 
 # Check if the dataset has 32514 rows
 if (nrow(analysis_data) == 32514) {
