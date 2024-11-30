@@ -64,7 +64,7 @@ cleaned_bombings_data$location <- trimws(cleaned_bombings_data$location)
 
 # Duration of bombing in days 
 cleaned_bombings_data$duration_days <- 
-  as.Date(cleaned_bombings_data$end_date) - as.Date(cleaned_bombings_data$start_date)
+  as.Date(cleaned_bombings_data$end_date) - as.Date(cleaned_bombings_data$start_date) + 1
 
 # Year of occurrence
 cleaned_bombings_data$start_year <- format(as.Date(cleaned_bombings_data$start_date), "%Y")
@@ -96,7 +96,5 @@ cleaned_bombings_data <- read_csv("data/02-analysis_data/analysis_data_bombings.
 write_parquet(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.parquet")
 write_parquet(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.parquet")
 
-head(casualties_data_parquet)
-head(bombings_data_parquet)
 
 
