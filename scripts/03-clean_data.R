@@ -7,18 +7,20 @@
 # Pre-requisites: 
   # - 02-download_data.R must have been run
   # - The `tidyverse` package must be installed and loaded
+  # - The `dplyr` package must be installed and loaded
   # - The `arrow` package must be installed and loaded
 # Any other information needed? [...UPDATE THIS...]
 
 #### Workspace setup ####
 library(tidyverse)
-#library(arrow)
+library(dplyr)
+library(arrow)
+
 #### Clean data ####
 
 # Copy and insert the path to the folder
 #source_folder = "" #Insert path here
 source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
-#combined_path <- file.path(source_folder, "data/01-raw_data/bombings.csv")
 
 load_csv <- function(file_name, base_folder = source_folder) {
   file_path <- file.path(base_folder, file_name)
@@ -28,11 +30,12 @@ load_csv <- function(file_name, base_folder = source_folder) {
 
 #### Load Datasets ####
 
+# Load casualties_data.csv
+cleaned_casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
+
 # Load bombings_data.csv
 cleaned_bombings_data <- load_csv("data/01-raw_data/bombings_data.csv")
 
-# Load casualties_data.csv
-cleaned_casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
 
 #### 
 ### CASUALTIES Dataset ###
@@ -73,11 +76,27 @@ cleaned_bombings_data$start_month <- format(as.Date(cleaned_bombings_data$start_
 cleaned_bombings_data$has_missing_coords <- 
   ifelse(is.na(cleaned_bombings_data$lon) | is.na(cleaned_bombings_data$lat), 1, 0)
 
+# Dummy for unknown time
+cleaned_bombings_data$time_unknown <- ifelse(is.na(cleaned_bombings_data$time), 1, 0)
 
+# Drop additional notes column
+cleaned_bombings_data <- cleaned_bombings_data %>% select(-additional_notes)
 
 #### Save data ####
 write_csv(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.csv")
+write_csv(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.csv")
+
 
 ## Save as parquet ##
+# Load data
+cleaned_casualties_data <- read_csv("data/02-analysis_data/analysis_data_casualties.csv")
+cleaned_bombings_data <- read_csv("data/02-analysis_data/analysis_data_bombings.csv")
+
+# Save as Parquet
+write_parquet(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.parquet")
+write_parquet(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.parquet")
+
+head(casualties_data_parquet)
+head(bombings_data_parquet)
 
 
