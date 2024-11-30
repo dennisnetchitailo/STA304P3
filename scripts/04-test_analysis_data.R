@@ -16,6 +16,8 @@ library(tidyverse)
 library(testthat)
 library(arrow)
 library(here)
+library(validate)
+library(pointblank)
 
 # Load data
 cleaned_data_bombings <- arrow::read_parquet(here::here("data/02-analysis_data/analysis_data_bombings.parquet"))
@@ -92,4 +94,21 @@ test_that("has_missing_coords is of class double", {
 
 test_that("time_unknown is of class double", {
   expect_type(cleaned_data_bombings$time_unknown, "double")
+})
+
+#### BOMBING DATASET TESTS ####
+
+# Values >0 for killed
+test_that("All values in 'killed' are greater than 0", {
+  expect_true(all(cleaned_data_casualties$killed >= 0, na.rm = TRUE))
+})
+
+# Values >0 for injured
+test_that("All values in 'injured' are greater than 0", {
+  expect_true(all(cleaned_data_casualties$injured >= 0, na.rm = TRUE))
+})
+
+# Values >0 for casualties
+test_that("All values in 'total_casualties' are greater than 0", {
+  expect_true(all(cleaned_data_casualties$total_casualties >= 0, na.rm = TRUE))
 })
