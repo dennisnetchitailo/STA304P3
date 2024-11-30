@@ -1,10 +1,13 @@
 #### Preamble ####
 # Purpose: Tests... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 26 September 2024 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
-# License: MIT
+# Author: Dennis Netchitailo
+# Date: 29 November 2024
+# Contact: dennis.netchitailo@mail.utoronto.ca 
+# License: --
 # Pre-requisites: [...UPDATE THIS...]
+  # - 03-clean_data.R must have been run
+  # - The `tidyverse` package must be installed and loaded
+  # - The `testthat` package must be installed and loaded
 # Any other information needed? [...UPDATE THIS...]
 
 
