@@ -59,6 +59,9 @@ cleaned_casualties_data$has_casualties <- ifelse(cleaned_casualties_data$total_c
 
 ### BOMBINGS Dataset ###
 
+# Make bombing_id integer
+cleaned_bombings_data$bombing_id <- as.integer(cleaned_bombings_data$bombing_id)
+
 # Remove whitespace before/after 
 cleaned_bombings_data$location <- trimws(cleaned_bombings_data$location)
 
