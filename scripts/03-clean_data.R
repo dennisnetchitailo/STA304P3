@@ -63,6 +63,15 @@ cleaned_bombings_data$location <- trimws(cleaned_bombings_data$location)
 cleaned_bombings_data$duration_days <- 
   as.Date(cleaned_bombings_data$end_date) - as.Date(cleaned_bombings_data$start_date)
 
+# Year of occurrence
+cleaned_bombings_data$start_year <- format(as.Date(cleaned_bombings_data$start_date), "%Y")
+
+# Month of occurrence
+cleaned_bombings_data$start_month <- format(as.Date(cleaned_bombings_data$start_date), "%m")
+
+# Dummy for missing coordinates
+cleaned_bombings_data$has_missing_coords <- 
+  ifelse(is.na(cleaned_bombings_data$lon) | is.na(cleaned_bombings_data$lat), 1, 0)
 
 
 
