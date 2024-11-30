@@ -1,7 +1,7 @@
 #### Preamble ####
 # Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
 # Author: Dennis Netchitailo
-# Date: November 29, 2024
+# Date: November 29 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
 # License: --
 # Pre-requisites: 
@@ -26,36 +26,39 @@ load_csv <- function(file_name, base_folder = source_folder) {
   return(data)
 }
 
+#### Load Datasets ####
+
 # Load bombings_data.csv
 bombings_data <- load_csv("data/01-raw_data/bombings_data.csv")
 
-# Load another CSV file, for example, casualties_data.csv
-casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
+# Load casualties_data.csv
+cleaned_casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
 
-# Inspect the datasets
-head(bombings_data)
-head(casualties_data)
+### BOMBINGS Dataset ###
 
 ## Add new column ## 
 
 # Add a new column for the proportion of killed relative to total casualties
-casualties_data$proportion_killed <- casualties_data$killed / casualties_data$total_casualties
+cleaned_casualties_data$proportion_killed <- 
+  cleaned_casualties_data$killed / cleaned_casualties_data$total_casualties
 
 # Handle cases where total_casualties is zero to avoid division by zero
-casualties_data$proportion_killed[casualties_data$total_casualties == 0] <- NA
+cleaned_casualties_data$proportion_killed[cleaned_casualties_data$total_casualties == 0] <- NA
 
 # Preview the updated dataset
-head(casualties_data)
+head(cleaned_casualties_data)
 
+# Create dummy variable for Killed
+cleaned_casualties_data$has_killed <- ifelse(cleaned_casualties_data$killed > 0, 1, 0)
 
+# Create dummy variable for Injured
+cleaned_casualties_data$has_injured <- ifelse(cleaned_casualties_data$injured > 0, 1, 0)
+
+# Create dummy variable for Casualties
+cleaned_casualties_data$has_casualties <- ifelse(cleaned_casualties_data$total_casualties > 0, 1, 0)
 
 #### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
-
-
-#csv_data <- read.csv("/data/01-raw_data/bombings_data.csv")
-#raw_data <- read_csv("inputs/data/plane_data.csv")
-#write_parquet(data, "path/to/save/cleaned_data.parquet")
+write_csv(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.csv")
 
 
 
