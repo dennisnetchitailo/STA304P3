@@ -36,6 +36,22 @@ casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
 head(bombings_data)
 head(casualties_data)
 
+## Add new column ## 
+
+# Add a new column for the proportion of killed relative to total casualties
+casualties_data$proportion_killed <- casualties_data$killed / casualties_data$total_casualties
+
+# Handle cases where total_casualties is zero to avoid division by zero
+casualties_data$proportion_killed[casualties_data$total_casualties == 0] <- NA
+
+# Preview the updated dataset
+head(casualties_data)
+
+
+
+#### Save data ####
+write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+
 
 #csv_data <- read.csv("/data/01-raw_data/bombings_data.csv")
 #raw_data <- read_csv("inputs/data/plane_data.csv")
@@ -72,5 +88,4 @@ cleaned_data <-
          ) |> 
   tidyr::drop_na()
 
-#### Save data ####
-write_csv(cleaned_data, "outputs/data/analysis_data.csv")
+
