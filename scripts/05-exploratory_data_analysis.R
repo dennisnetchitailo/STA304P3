@@ -1,10 +1,13 @@
 #### Preamble ####
 # Purpose: Models... [...UPDATE THIS...]
-# Author: Rohan Alexander [...UPDATE THIS...]
-# Date: 11 February 2023 [...UPDATE THIS...]
-# Contact: rohan.alexander@utoronto.ca [...UPDATE THIS...]
-# License: MIT
+# Author: Dennis Netchitailo
+# Date: 30 November 2024
+# Contact: dennis.netchitailo@mail.utoronto.ca 
+# License: --
 # Pre-requisites: [...UPDATE THIS...]
+  # - The `tidyverse` package must be installed and loaded
+  # - The `rstanarm` package must be installed and loaded
+
 # Any other information needed? [...UPDATE THIS...]
 
 
