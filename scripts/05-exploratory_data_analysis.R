@@ -4,7 +4,8 @@
 # Date: 30 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
 # License: --
-# Pre-requisites: [...UPDATE THIS...]
+# Pre-requisites: 
+  # - 03-clean_data.R must have been run
   # - The `tidyverse` package must be installed and loaded
   # - The `rstanarm` package must be installed and loaded
 
