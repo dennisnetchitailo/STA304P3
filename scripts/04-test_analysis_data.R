@@ -15,58 +15,89 @@
 library(tidyverse)
 library(testthat)
 
-data <- read_csv("data/02-analysis_data/analysis_data.csv")
+# Load data
+cleaned_data_bombings <- arrow::read_parquet(here::here("data/02-analysis_data/analysis_data_bombings.parquet"))
+cleaned_data_casualties <- arrow::read_parquet(here::here("data/02-analysis_data/analysis_data_casualties.parquet"))
 
+#data_bombings <- read_csv("data/02-analysis_data/analysis_data_bombings.csv")
+#data_casualties <- read_csv("data/02-analysis_data/analysis_data_casualties.csv")
 
 #### Test data ####
-# Test that the dataset has 151 rows - there are 151 divisions in Australia
-test_that("dataset has 151 rows", {
-  expect_equal(nrow(analysis_data), 151)
+
+# Ensure the data is loaded correctly
+#data_bombings <- read_csv("data/02-analysis_data/analysis_data_bombings.csv")
+#data_casualties <- read_csv("data/02-analysis_data/analysis_data_casualties.csv")
+
+# Convert necessary columns to the expected types (if not already)
+#data_bombings$start_date <- as.Date(data_bombings$start_date, format="%Y-%m-%d")
+#data_bombings$end_date <- as.Date(data_bombings$end_date, format="%Y-%m-%d")
+
+#### BOMBING DATASET TESTS ####
+
+test_that("bombing_id is of class integer", {
+  expect_type(data_bombings$bombing_id, "integer")
 })
 
-# Test that the dataset has 3 columns
-test_that("dataset has 3 columns", {
-  expect_equal(ncol(analysis_data), 3)
+test_that("civil_defense_region is of class character", {
+  expect_type(data_bombings$civil_defense_region, "character")
 })
 
-# Test that the 'division' column is character type
-test_that("'division' is character", {
-  expect_type(analysis_data$division, "character")
+test_that("country is of class character", {
+  expect_type(data_bombings$country, "character")
 })
 
-# Test that the 'party' column is character type
-test_that("'party' is character", {
-  expect_type(analysis_data$party, "character")
+test_that("location is of class character", {
+  expect_type(data_bombings$location, "character")
 })
 
-# Test that the 'state' column is character type
-test_that("'state' is character", {
-  expect_type(analysis_data$state, "character")
+test_that("lon is of class numeric", {
+  expect_type(data_bombings$lon, "numeric")
 })
 
-# Test that there are no missing values in the dataset
-test_that("no missing values in dataset", {
-  expect_true(all(!is.na(analysis_data)))
+test_that("lat is of class numeric", {
+  expect_type(data_bombings$lat, "numeric")
 })
 
-# Test that 'division' contains unique values (no duplicates)
-test_that("'division' column contains unique values", {
-  expect_equal(length(unique(analysis_data$division)), 151)
+test_that("start_date is of class Date", {
+  expect_s3_class(data_bombings$start_date, "Date")
 })
 
-# Test that 'state' contains only valid Australian state or territory names
-valid_states <- c("New South Wales", "Victoria", "Queensland", "South Australia", "Western Australia", 
-                  "Tasmania", "Northern Territory", "Australian Capital Territory")
-test_that("'state' contains valid Australian state names", {
-  expect_true(all(analysis_data$state %in% valid_states))
+test_that("end_date is of class Date", {
+  expect_s3_class(data_bombings$end_date, "Date")
 })
 
-# Test that there are no empty strings in 'division', 'party', or 'state' columns
-test_that("no empty strings in 'division', 'party', or 'state' columns", {
-  expect_false(any(analysis_data$division == "" | analysis_data$party == "" | analysis_data$state == ""))
+test_that("time is of class character", {
+  expect_type(data_bombings$time, "character")
 })
 
-# Test that the 'party' column contains at least 2 unique values
-test_that("'party' column contains at least 2 unique values", {
-  expect_true(length(unique(analysis_data$party)) >= 2)
+test_that("casualty_group is of class integer", {
+  expect_type(data_bombings$casualty_group, "integer")
+})
+
+test_that("duration_days is of class integer", {
+  expect_type(data_bombings$duration_days, "integer")
+})
+
+test_that("start_year is of class integer", {
+  expect_type(data_bombings$start_year, "integer")
+})
+
+test_that("start_year values are within the range 1939-1944", {
+  expect_true(all(data_bombings$start_year >= 1939 & data_bombings$start_year <= 1944))
+})
+
+test_that("start_month is of class integer", {
+  expect_type(data_bombings$start_month, "integer")
+})
+
+test_that("start_month values are within the range 1-12", {
+  expect_true(all(data_bombings$start_month >= 1 & data_bombings$start_month <= 12))
+})
+
+test_that("has_missing_coords is of class integer", {
+  expect_type(data_bombings$has_missing_coords, "integer")
+})
+
+test_that("time_unknown is of class integer", {
+  expect_type(data_bombings$time_unknown, "integer")
 })
