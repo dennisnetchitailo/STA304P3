@@ -85,6 +85,26 @@ cleaned_bombings_data$time_unknown <- ifelse(is.na(cleaned_bombings_data$time), 
 # Drop additional notes column
 cleaned_bombings_data <- cleaned_bombings_data %>% select(-additional_notes)
 
+# _______________________
+
+# Convert bombing_id to integer
+cleaned_bombings_data$bombing_id <- as.integer(cleaned_bombings_data$bombing_id)
+
+# Convert casualty_group, duration_days, start_year to integer
+cleaned_bombings_data$casualty_group <- as.integer(cleaned_bombings_data$casualty_group)
+cleaned_bombings_data$duration_days <- as.integer(cleaned_bombings_data$duration_days)
+cleaned_bombings_data$start_year <- as.integer(cleaned_bombings_data$start_year)
+
+# Convert has_missing_coords, time_unknown to integer
+cleaned_bombings_data$has_missing_coords <- as.integer(cleaned_bombings_data$has_missing_coords)
+cleaned_bombings_data$time_unknown <- as.integer(cleaned_bombings_data$time_unknown)
+
+# For start_month, if you want it as an integer (month as 1-12), convert it
+cleaned_bombings_data$start_month <- as.integer(cleaned_bombings_data$start_month)
+
+
+#________________________
+
 #### Save data ####
 write_csv(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.csv")
 write_csv(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.csv")
