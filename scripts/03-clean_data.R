@@ -12,24 +12,38 @@
 
 #### Workspace setup ####
 library(tidyverse)
-library(arrow)
+#library(arrow)
 #### Clean data ####
+
+# Copy and insert the path to the folder
 #source_folder = "" #Insert path here
 source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
-combined_path <- file.path(source_folder, "data/01-raw_data/bombings_data.csv")
+#cobined_path <- file.path(source_folder, "data/01-raw_data/bombings.csv")
+
+load_csv <- function(file_name, base_folder = source_folder) {
+  file_path <- file.path(base_folder, file_name)
+  data <- read.csv(file_path)
+  return(data)
+}
+
+# Load bombings_data.csv
+bombings_data <- load_csv("data/01-raw_data/bombings_data.csv")
+
+# Load another CSV file, for example, casualties_data.csv
+casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
+
+# Inspect the datasets
+head(bombings_data)
+head(casualties_data)
 
 
-
-csv_data <- read.csv("/data/01-raw_data/bombings_data.csv")
-
-
-raw_data <- read_csv("inputs/data/plane_data.csv")
-
+#csv_data <- read.csv("/data/01-raw_data/bombings_data.csv")
+#raw_data <- read_csv("inputs/data/plane_data.csv")
 #write_parquet(data, "path/to/save/cleaned_data.parquet")
 
 
 
-
+# ______________________________________________________________________________
 
 cleaned_data <-
   raw_data |>
