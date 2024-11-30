@@ -8,6 +8,8 @@
   # - 03-clean_data.R must have been run
   # - The `tidyverse` package must be installed and loaded
   # - The `testthat` package must be installed and loaded
+  # - The `arrow` package must be installed and loaded
+  # - The `here` package must be installed and loaded
 # Any other information needed? [...UPDATE THIS...]
 
 
@@ -16,8 +18,6 @@ library(tidyverse)
 library(testthat)
 library(arrow)
 library(here)
-library(validate)
-library(pointblank)
 
 # Load data
 cleaned_data_bombings <- arrow::read_parquet(here::here("data/02-analysis_data/analysis_data_bombings.parquet"))
