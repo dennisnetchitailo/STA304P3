@@ -37,7 +37,6 @@ cleaned_casualties_data <- load_csv("data/01-raw_data/casualties_data.csv")
 cleaned_bombings_data <- load_csv("data/01-raw_data/bombings_data.csv")
 
 
-#### 
 ### CASUALTIES Dataset ###
 
 ## Add new columns ## 
@@ -89,11 +88,47 @@ cleaned_bombings_data <- cleaned_bombings_data %>% select(-additional_notes)
 write_csv(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.csv")
 write_csv(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.csv")
 
+##### COMBINED DATASET #####
+
+#### Load Datasets ####
+
+# Load casualties_data.csv
+casualties_data <- load_csv("data/02-analysis_data/analysis_data_casualties.csv")
+
+# Load bombings_data.csv
+bombings_data <- load_csv("data/02-analysis_data/analysis_data_bombings.csv")
+
+## Combine ## 
+
+aggregated_bombings <- bombings_data %>%
+  group_by(casualty_group) %>%
+  summarize(
+    total_incidents = n(),
+    civil_defense_region = first(civil_defence_region),
+    country = first(country),
+    start_date = first(start_date),
+    end_date = first(end_date),
+    time = first(time),
+    duration_days = first(duration_days),
+    start_year = first(start_year),
+    start_month = first(start_month),
+    time_unknown = first(time_unknown),
+    .groups = "drop"
+  )
+
+combined_data <- aggregated_bombings %>%
+  left_join(casualties_data, by = "casualty_group")
+
+
+## Write Data ##
+write_csv(combined_data, "data/02-analysis_data/combined_data.csv")
+message("File successfully written!")
 
 ## Save as parquet ##
 # Load data
 cleaned_casualties_data <- read_csv("data/02-analysis_data/analysis_data_casualties.csv")
 cleaned_bombings_data <- read_csv("data/02-analysis_data/analysis_data_bombings.csv")
+
 
 # Save as Parquet
 write_parquet(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.parquet")
