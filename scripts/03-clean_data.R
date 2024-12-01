@@ -90,7 +90,7 @@ write_csv(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.c
 
 ##### COMBINED DATASET #####
 
-#### Load Datasets ####
+#### Load Dataset ####
 
 # Load casualties_data.csv
 casualties_data <- load_csv("data/02-analysis_data/analysis_data_casualties.csv")
@@ -120,7 +120,7 @@ combined_data <- aggregated_bombings %>%
   left_join(casualties_data, by = "casualty_group")
 
 
-## Write Data ##
+## Save Data ##
 write_csv(combined_data, "data/02-analysis_data/combined_data.csv")
 message("File successfully written!")
 
