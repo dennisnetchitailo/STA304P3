@@ -31,19 +31,21 @@ library(rstanarm)
 library(ggplot2)
 library(brms)
 
-
 ```
 
 
 # Introduction
 
-Overview paragraph
+////Overview paragraph////
+The Ministry of Home Security was the British government department established in 1939 to direct the response to German air raids. Part of its responsibility was tracking data related to air raids. This data  
 
-Estimand paragraph
 
-Results paragraph
+////Estimand paragraph////
+The estimand is the number of casualties sustained during an attack. I use the Home Security data with a multiple linear regression model to estimate the difference in casualties during nighttime air raids compared to daytime air raids 
 
-Why it matters paragraph
+////Results paragraph////
+
+////Why it matters paragraph////
 
 Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data....
 
