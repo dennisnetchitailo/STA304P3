@@ -15,6 +15,7 @@
 #### Workspace setup ####
 library(tidyverse)
 library(rstanarm)
+library(dplyr)
 
 source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
 
@@ -54,6 +55,35 @@ sum(casualties_analysis_data$total_casualties, na.rm = TRUE) -
   (sum(casualties_analysis_data$killed, na.rm = TRUE)
  + sum(casualties_analysis_data$injured, na.rm = TRUE))
 
+# Mean Killed
+mean(casualties_analysis_data$killed, na.rm = TRUE)
+
+# Mean Injured
+mean(casualties_analysis_data$injured, na.rm = TRUE)
+
+# Mean Casualties
+mean(casualties_analysis_data$total_casualties, na.rm = TRUE)
+
+# Distribution of casualties
+summary(casualties_analysis_data$total_casualties)
+
+# Distribution of killed across groups
+casualties_analysis_data %>%
+  summarize(
+    min_killed = min(killed, na.rm = TRUE),
+    max_killed = max(killed, na.rm = TRUE),
+    mean_killed = mean(killed, na.rm = TRUE),
+    median_killed = median(killed, na.rm = TRUE)
+  )
+
+# Distribution of injured across groups
+casualties_analysis_data %>%
+  summarize(
+    min_injured = min(injured, na.rm = TRUE),
+    max_injured = max(injured, na.rm = TRUE),
+    mean_injured = mean(injured, na.rm = TRUE),
+    median_injured = median(injured, na.rm = TRUE)
+  )
 
 ## BOMBINGS DATASET ##
 
@@ -80,6 +110,18 @@ bombings_analysis_data %>%
 sum(is.na(bombings_analysis_data$lon) | is.na(bombings_analysis_data$lat))
 
 summary(bombings_analysis_data$duration_days)
+
+## COMBINED Summary Statistics ##
+
+# Count incidents per casualty group
+incident_counts <- bombings_analysis_data %>%
+  group_by(casualty_group) %>%
+  summarize(total_incidents = n(), .groups = "drop")
+
+
+combined_data %>% 
+  summarize(avg_incidents_per_group = mean(total_incidents, na.rm = TRUE))
+
 
 
 # __________________________________________________________________
