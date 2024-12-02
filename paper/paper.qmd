@@ -3,10 +3,12 @@ title: "My title"
 subtitle: "My subtitle if needed"
 author: 
   - Dennis Netchitailo
-thanks: "Code and data are available at: [https://github.com/RohanAlexander/starter_folder](https://github.com/RohanAlexander/starter_folder)."
-date: today
+thanks: "Code and data are available at: 
+[https://github.com/dennisnetchitailo/STA304P3]
+(https://github.com/tacookson/data/tree/master/britain-bombing-ww2)."
+date: 2 December 2024
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "This study models the German bombing campaign of Britain during the Second World War by analyzing the data collected by the Home Security War Room from 1939 to 1945 to summarise air raid damage. I use a multiple linear regression model to estimate the impact of the time an attack occurred on casualties."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -19,6 +21,9 @@ bibliography: references.bib
 
 library(tidyverse)
 library(palmerpenguins)
+library(arrow)
+library(here)
+
 ```
 
 
