@@ -8,6 +8,7 @@
   # - 03-clean_data.R must have been run
   # - The `tidyverse` package must be installed and loaded
   # - The `rstanarm` package must be installed and loaded
+  # - The `ggplot2` package must be installed and loaded
 
 # Any other information needed? [...UPDATE THIS...]
 
@@ -16,6 +17,8 @@
 library(tidyverse)
 library(rstanarm)
 library(dplyr)
+library(ggplot2)
+
 
 source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
 
@@ -126,6 +129,32 @@ combined_data %>%
 
 # __________________________________________________________________
 
+first_model <- stan_glm(
+  total_casualties ~ time_binary,
+  data = combined_data,
+  family = gaussian(),  # Change family if appropriate
+  prior = normal(0, 2),  # Prior for the slope
+  prior_intercept = normal(0, 5),  # Prior for the intercept
+  chains = 4,  # Number of chains
+  iter = 2000,  # Number of iterations
+  seed = 12345  # For reproducibility
+)
+
+first_model
+
+# Summarize the model
+summary(first_model)
+
+library(ggplot2)
+
+ggplot(combined_data, aes(x = as.factor(time_binary), y = total_casualties)) +
+  geom_boxplot() +
+  labs(x = "Time (0 = Day, 1 = Night)", y = "Total Casualties") +
+  theme_minimal()
+
+
+
+# __________________________________________________________________
 first_model <-
   stan_glm(
     formula = flying_time ~ length + width,
