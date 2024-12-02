@@ -119,6 +119,40 @@ aggregated_bombings <- bombings_data %>%
 combined_data <- aggregated_bombings %>%
   left_join(casualties_data, by = "casualty_group")
 
+# Convert casualty_group to integer type
+combined_data <- combined_data %>%
+  mutate(casualty_group = as.integer(casualty_group))
+
+
+combined_data <- combined_data %>%
+  mutate(
+    proportion_killed = ifelse(total_casualties > 0, killed / total_casualties, NA)
+  )
+
+# Remove rows with invalid proportions
+cleaned_data <- combined_data %>%
+  filter(is.na(proportion_killed) | (proportion_killed >= 0 & proportion_killed <= 1))
+combined_data <- cleaned_data
+
+# Dummy variable for Time
+cleaned_data <- combined_data %>%
+  mutate(
+    # Standardize the time column
+    time = case_when(
+      str_to_lower(time) == "day" ~ "Day",
+      str_to_lower(time) == "night" ~ "Night",
+      TRUE ~ "Unspecified"  # Handle unspecified or other unexpected values
+    ),
+    # Create time_binary: 0 = Day, 1 = Night, NA for Unspecified
+    time_binary = ifelse(time == "Night", 1,
+                         ifelse(time == "Day", 0, NA))
+  )
+
+
+# View the cleaned dataset
+head(cleaned_data)
+
+combined_data <- cleaned_data
 
 ## Save Data ##
 write_csv(combined_data, "data/02-analysis_data/combined_data.csv")
