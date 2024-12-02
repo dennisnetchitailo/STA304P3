@@ -23,6 +23,14 @@ library(tidyverse)
 library(palmerpenguins)
 library(arrow)
 library(here)
+library(readr)
+library(usethis)
+library(dplyr)
+library(testthat)
+library(rstanarm)
+library(ggplot2)
+library(brms)
+
 
 ```
 
