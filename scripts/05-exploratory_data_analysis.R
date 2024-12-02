@@ -9,6 +9,7 @@
   # - The `tidyverse` package must be installed and loaded
   # - The `rstanarm` package must be installed and loaded
   # - The `ggplot2` package must be installed and loaded
+  # - The `brms` package must be installed and loaded
 
 # Any other information needed? [...UPDATE THIS...]
 
@@ -18,6 +19,7 @@ library(tidyverse)
 library(rstanarm)
 library(dplyr)
 library(ggplot2)
+library(brms)
 
 
 source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
@@ -145,11 +147,60 @@ first_model
 # Summarize the model
 summary(first_model)
 
-library(ggplot2)
+# Create predicted values for the model
+combined_data_first_model <- combined_data
+combined_data_first_model$predicted <- posterior_predict(first_model, summary = TRUE)
 
+# Plot data and regression line
+ggplot(combined_data, aes(x = time_binary, y = total_casualties)) +
+  geom_point(alpha = 0.5) +  # Actual data points
+  geom_smooth(aes(y = predicted), method = "lm", color = "blue") +  # Regression line
+  labs(title = "Regression Model: Total Casualties vs Time",
+       x = "Time (0 = Day, 1 = Night)",
+       y = "Total Casualties") +
+  theme_minimal()
+
+
+
+
+# Boxplot of Data
 ggplot(combined_data, aes(x = as.factor(time_binary), y = total_casualties)) +
   geom_boxplot() +
   labs(x = "Time (0 = Day, 1 = Night)", y = "Total Casualties") +
+  theme_minimal()
+
+
+# Fit a Zero-Inflated Negative Binomial model
+zero_inflated_model <- brm(
+  formula = total_casualties ~ time_binary + (1 | casualty_group),  # Add random effects if needed
+  data = combined_data,
+  family = zero_inflated_negbinomial(link = "log"),  # Zero-inflated negative binomial
+  prior = c(
+    prior(normal(0, 5), class = "b"),  # Priors for fixed effects
+    prior(cauchy(0, 2), class = "sd")  # Priors for random effects if present
+  ),
+  chains = 4,
+  iter = 2000,
+  cores = 4,
+  seed = 123
+)
+
+# Summarize the zero-inflated model
+summary(zero_inflated_model)
+
+# Posterior predictive checks
+pp_check(zero_inflated_model)
+
+# Generate predicted values
+combined_data$predicted <- predict(zero_inflated_model)[, "Estimate"]
+
+# Plot actual vs. predicted
+library(ggplot2)
+ggplot(combined_data, aes(x = time_binary, y = total_casualties)) +
+  geom_point(alpha = 0.4) +
+  geom_line(aes(y = predicted), color = "red", size = 1) +
+  labs(x = "Time (0 = Day, 1 = Night)", y = "Total Casualties",
+       title = "Zero-Inflated Model: Total Casualties vs. Time") +
   theme_minimal()
 
 
