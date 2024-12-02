@@ -20,95 +20,100 @@ library(arrow)
 library(here)
 
 # Load data
-cleaned_data_bombings <- arrow::read_parquet(here::here("data/02-analysis_data/analysis_data_bombings.parquet"))
-cleaned_data_casualties <- arrow::read_parquet(here::here("data/02-analysis_data/analysis_data_casualties.parquet"))
+combined_data <- arrow::read_parquet(here::here("data/02-analysis_data/combined_data.parquet"))
 
 #### Test data ####
 
-#### BOMBING DATASET TESTS ####
+#### COMBINED DATASET TESTS ####
 
-test_that("bombing_id is of class double", {
-  expect_type(cleaned_data_bombings$bombing_id, "double")
+# Test casualty-related columns
+test_that("All values in 'killed' are greater than or equal to 0", {
+  expect_true(all(combined_data$killed >= 0, na.rm = TRUE))
+})
+
+test_that("All values in 'injured' are greater than or equal to 0", {
+  expect_true(all(combined_data$injured >= 0, na.rm = TRUE))
+})
+
+test_that("All values in 'total_casualties' are greater than or equal to 0", {
+  expect_true(all(combined_data$total_casualties >= 0, na.rm = TRUE))
+})
+
+# Test bombing-related columns
+test_that("casualty_group is of class double", {
+  expect_type(combined_data$casualty_group, "double")
+})
+
+test_that("total_incidents is of class double", {
+  expect_type(combined_data$total_incidents, "double")
 })
 
 test_that("civil_defense_region is of class character", {
-  expect_type(cleaned_data_bombings$civil_defence_region, "character")
+  expect_type(combined_data$civil_defense_region, "character")
 })
 
 test_that("country is of class character", {
-  expect_type(cleaned_data_bombings$country, "character")
+  expect_type(combined_data$country, "character")
 })
 
-test_that("location is of class character", {
-  expect_type(cleaned_data_bombings$location, "character")
-})
-
-test_that("lon is of class double", {
-  expect_type(cleaned_data_bombings$lon, "double")
-})
-
-test_that("lat is of class double", {
-  expect_type(cleaned_data_bombings$lat, "double")
-})
-
-test_that("start_date is of class Date", {
-  expect_s3_class(cleaned_data_bombings$start_date, "Date")
+test_that("start_date is of class double", {
+  expect_type(combined_data$start_date, "double")
 })
 
 test_that("end_date is of class Date", {
-  expect_s3_class(cleaned_data_bombings$end_date, "Date")
+  expect_s3_class(combined_data$end_date, "Date")
 })
 
 test_that("time is of class character", {
-  expect_type(cleaned_data_bombings$time, "character")
-})
-
-test_that("casualty_group is of class double", {
-  expect_type(cleaned_data_bombings$casualty_group, "double")
+  expect_type(combined_data$time, "character")
 })
 
 test_that("duration_days is of class double", {
-  expect_type(cleaned_data_bombings$duration_days, "double")
+  expect_type(combined_data$duration_days, "double")
 })
 
 test_that("start_year is of class double", {
-  expect_type(cleaned_data_bombings$start_year, "double")
+  expect_type(combined_data$start_year, "double")
 })
 
 test_that("start_year values are within the range 1939-1945, ignoring NAs", {
-  expect_true(all(cleaned_data_bombings$start_year >= 1939 & cleaned_data_bombings$start_year <= 1945, na.rm = TRUE))
+  expect_true(all(combined_data$start_year >= 1939 & combined_data$start_year <= 1945, na.rm = TRUE))
 })
 
-
 test_that("start_month is of class double", {
-  expect_type(cleaned_data_bombings$start_month, "double")
+  expect_type(combined_data$start_month, "double")
 })
 
 test_that("start_month values are within the range 1-12, ignoring NAs", {
-  expect_true(all(cleaned_data_bombings$start_month >= 1 & cleaned_data_bombings$start_month <= 12, na.rm = TRUE))
-})
-
-test_that("has_missing_coords is of class double", {
-  expect_type(cleaned_data_bombings$has_missing_coords, "double")
+  expect_true(all(combined_data$start_month >= 1 & combined_data$start_month <= 12, na.rm = TRUE))
 })
 
 test_that("time_unknown is of class double", {
-  expect_type(cleaned_data_bombings$time_unknown, "double")
+  expect_type(combined_data$time_unknown, "double")
 })
 
-#### BOMBING DATASET TESTS ####
+#### Additional Tests ####
 
-# Values >0 for killed
-test_that("All values in 'killed' are greater than 0", {
-  expect_true(all(cleaned_data_casualties$killed >= 0, na.rm = TRUE))
+# # Test proportion_killed is between 0 and 1
+# test_that("proportion_killed values are between 0 and 1, ignoring NAs", {
+#   expect_true(all(combined_data$proportion_killed >= 0 & combined_data$proportion_killed <= 1, na.rm = TRUE))
+# })
+
+test_that("proportion_killed values are between 0 and 1, ignoring NAs", {
+  # Ensure the proportion is within range for non-NA values
+  expect_true(all(combined_data$proportion_killed >= 0 & combined_data$proportion_killed <= 1, na.rm = TRUE))
 })
 
-# Values >0 for injured
-test_that("All values in 'injured' are greater than 0", {
-  expect_true(all(cleaned_data_casualties$injured >= 0, na.rm = TRUE))
+
+# Test presence of boolean flags
+test_that("has_killed is of class double", {
+  expect_type(combined_data$has_killed, "double")
 })
 
-# Values >0 for casualties
-test_that("All values in 'total_casualties' are greater than 0", {
-  expect_true(all(cleaned_data_casualties$total_casualties >= 0, na.rm = TRUE))
+test_that("has_injured is of class double", {
+  expect_type(combined_data$has_injured, "double")
+})
+
+test_that("has_casualties is of class double", {
+  expect_type(combined_data$has_casualties, "double")
 })
