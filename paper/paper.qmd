@@ -19,7 +19,6 @@ bibliography: references.bib
 #| message: false
 
 library(tidyverse)
-library(palmerpenguins)
 library(arrow)
 library(here)
 library(readr)
@@ -58,15 +57,30 @@ Telegraphing paragraph: The remainder of this paper is structured as follows. @s
 
 ## Overview
 
-I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were 
+This study uses the [@airraids]
+
+I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were **`tidyverse`** for data manipulation and visualization [@tidyverse], **`here`** for file path management [@here], **`lubridate`** for date handling [@lubridate], **`arrow`** for data storage and processing [@arrow], **`testthat`** for unit testing [@testthat], **`readr`** for reading structured data [@readr], **`dplyr`** for data manipulation [@dplyr], **`stringr`** for string operations [@stringr], **`ggplot2`** for creating visualizations [@ggplot2], **`caret`** for modeling [@caret], **`kableExtra`** for creating tables [@kableExtra], and **`modelsummary`** for summarizing models and results [@modelsummary].
 
 .... Our data [@airraids].... Following @tellingstories, we consider...
+
+arrow /
+here / 
+readr /
+usethis
+dplyr / 
+testthat / 
+rstanarm
+ggplot2 /
+brms
+
+## Measurement
 
 Overview text
 
 ## Measurement
 	
-Some paragraphs about how we go from a phenomena in the world to an entry in the dataset.
+The measurement process refers to the attempt to explain real world events through data, such as an individual act of warfare, as represented by the use of a self-propelled (missile) or gravity released explosive (bomb) to strike land or sea target, into numerical entries describing this event. Each entry in the dataset represents a bombing incident that took place in the UK during WW2. 
+	
 
 ## Outcome variables
 
