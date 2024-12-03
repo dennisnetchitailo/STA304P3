@@ -1,13 +1,12 @@
 ---
-title: "Datasheet for 'A dataset'"
-subtitle: "My subtitle if needed"
+title: "Datasheet for 'air raids dataset'"
+subtitle: ""
 author: 
-  - First author
-  - Another author
+  - Dennis Netchitailo
 thanks: "Code and data are available at: LINK."
 date: "`r Sys.time()`"
 date-format: "D MMMM YYYY"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+abstract: "The UK government required data about the effects of air raids in order to understand the impact on the population and the military. Germany's goal was to weaken the UK through the air enough to allow for an amphibious invasion. It was critical for the UK to understand the effectiveness of Germany's strategy of trying to degrade the UK's morale, economy, and war fighting capabilities."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -19,7 +18,7 @@ Extract of the questions from @gebru2021datasheets.
 **Motivation**
 
 1. *For what purpose was the dataset created? Was there a specific task in mind? Was there a specific gap that needed to be filled? Please provide a description.*
-    - The dataset was created to enable analysis of Australian politicians. We were unable to find a publicly available dataset in a structured format that had the biographical and political information on Australian politicians that was needed for modelling.
+    - The dataset was created to analyze the impact of air raids in the UK during WWII, focusing on casualties and incident patterns. It aimed to provide insights into the frequency and severity of incidents over time.
 2. *Who created the dataset (for example, which team, research group) and on behalf of which entity (for example, company, institution, organization)?*
     - TBD
 3. *Who funded the creation of the dataset? If there is an associated grant, please provide the name of the grantor and the grant name and number.*
