@@ -1,11 +1,11 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "Air raids on the UK: understanding the effect of time on casualties"
+subtitle: "How nighttime can influence the destructiveness of warfare"
 author: 
   - Dennis Netchitailo
 thanks: "Code and data are available at: 
 [https://github.com/dennisnetchitailo/STA304P3](https://github.com/dennisnetchitailo/STA304P3)."
-date: 2 December 2024
+date: 02 December 2024
 date-format: long
 abstract: "With wars raging across the world, notably, between Russia and Ukraine, and aerial bombardment using aircraft or missiles a major cause of civilian casualties far from the frontlines, understanding, based on historical data, whether either nighttime or daytime attacks are more damaging would allow policymakers to better allocate resources when dealing with the treat of aerial attack. This study models the German bombing campaign of Britain during the Second World War by analyzing the data collected by the Home Security War Room from 1939 to 1945 that summarised air raid damage. I use a multiple linear regression model to estimate the impact of the time an attack occurred on the resulting casualties."
 format: pdf
@@ -74,37 +74,50 @@ ggplot2 /
 brms
 
 ## Measurement
-
-Overview text
-
-## Measurement
 	
 The measurement process refers to the attempt to explain real world events through data, such as an individual act of warfare, as represented by the use of a self-propelled (missile) or gravity released explosive (bomb) to strike land or sea target, into numerical entries describing this event. Each entry in the dataset represents a bombing incident that took place in the UK during WW2. 
 	
+**Country**: The country where an incident occurred. This includes England, Scotland, Wales, Northern Ireland, and the Channel Islands. 
+**Location**: 
+**Civil Defense Region**: A region defined by the military for purposes of organization. The United Kingdom was divided into 13 regions. 
+**Coordinates: Longitude and Latitude**: The location of an incident as recorded by the mercator projection.  
+**Date: Start & End**: The date an incident started and ended at a specific location. 
+**Time** The time of day an incident occurred. Day is defined as being between 6AM and 6PM. Night is defined as being between 6PM and 6AM. 
+**Casualties: Killed, Injured, Total**: The number of people killed or injured due to an incident. Total casualties is the sum of the number killed and injured in the same incident. 
+
+## Data Cleaning
+The two datasets that were used to make the single dataset that provided the data for the analysis were cleaned to ensure accuracy and consistency.  Missing values were dealt with by removing them from the analysis. Variables were converted into logical data types. Unneeded columns were removed. The two cleaned datasets were unified into one. 
+
+
 
 ## Outcome variables
 
 Add graphs, tables and text. Use sub-sub-headings for each outcome variable or update the subheading to be singular.
 
+The outcome variable is **`total_casualties`**. This is the primary dependent variable that the model is designed to predict. It represents the number of people killed or injured by air raids. The model seeks to identify the variables affecting this number. 
 
-
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+@fig-expectancy visualizes the distribution of life expectancy from 2015 to 2020 as percentages, combining a histogram and a density plot. A large concentration of observations is observed range of 0% to 25%, reflecting a significant proportion of countries with lower life expectancy relative to others in the dataset. Another visible concentration is around 75% to 100%, indicating a group of countries with relatively high life expectancy. The blue density curve overlays the histogram, providing a smoothed representation of the distribution. Peaks in the curve correspond to high frequency within the histogram. The density plot emphasized the bimodal nature of the distribution with two distinct peaks: one around 12 as low life expectancy percentages; another peak around 87as high life expectancy percentage. 
 
 ```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
+#| label: fig-timesdistribution
+#| fig-cap: "Distribution of casualties in the UK caused by air raids throughout the war."
 #| echo: false
+#| eval: true
+#| warning: false
+#| message: false
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
+# Create the histogram plot
+ggplot(combined_data, aes(x = factor(start_month), y = total_casualties, fill = as.factor(start_year))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_x_discrete(name = "Month") +
+  scale_y_continuous(name = "Total Casualties") +
+  labs(title = "Total Casualties by Month (1939-1945)", fill = "Year") +
   theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-Talk more about it.
+
+
 
 And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
 
@@ -134,9 +147,9 @@ Add graphs, tables and text.
 Use sub-sub-headings for each outcome variable and feel free to combine a few into one if they go together naturally.
 
 
+The **predictor variables** are the factors that are assumed to influence the number of casualties. 
 
-
-
+1. **Civil Defense Region ('civil_defense_region')**: is a factor because different military regions differed in their capabilities to prevent and to respond to air raids. 
 
 
 
