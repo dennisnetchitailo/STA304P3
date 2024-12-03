@@ -7,7 +7,7 @@ thanks: "Code and data are available at:
 [https://github.com/dennisnetchitailo/STA304P3](https://github.com/dennisnetchitailo/STA304P3)."
 date: 2 December 2024
 date-format: long
-abstract: "This study models the German bombing campaign of Britain during the Second World War by analyzing the data collected by the Home Security War Room from 1939 to 1945 to summarise air raid damage. I use a multiple linear regression model to estimate the impact of the time an attack occurred on casualties."
+abstract: "With wars raging across the world, notably, between Russia and Ukraine, and aerial bombardment using aircraft or missiles a major cause of civilian casualties far from the frontlines, understanding, based on historical data, whether either nighttime or daytime attacks are more damaging would allow policymakers to better allocate resources when dealing with the treat of aerial attack. This study models the German bombing campaign of Britain during the Second World War by analyzing the data collected by the Home Security War Room from 1939 to 1945 that summarised air raid damage. I use a multiple linear regression model to estimate the impact of the time an attack occurred on the resulting casualties."
 format: pdf
 number-sections: true
 bibliography: references.bib
@@ -58,7 +58,9 @@ Telegraphing paragraph: The remainder of this paper is structured as follows. @s
 
 ## Overview
 
-I used the statistical programming language R [@citeR].... Our data [@shelter].... Following @tellingstories, we consider...
+I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were 
+
+.... Our data [@airraids].... Following @tellingstories, we consider...
 
 Overview text
 
