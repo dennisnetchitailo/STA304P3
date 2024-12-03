@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Cleans the raw plane data recorded by two observers..... [...UPDATE THIS...]
+# Purpose: Cleans the raw bombings and casualties data recorded by the Ministry of Home Security
 # Author: Dennis Netchitailo
 # Date: November 29 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
@@ -9,7 +9,7 @@
   # - The `tidyverse` package must be installed and loaded
   # - The `dplyr` package must be installed and loaded
   # - The `arrow` package must be installed and loaded
-# Any other information needed? [...UPDATE THIS...]
+# Any other information needed? No.
 
 #### Workspace setup ####
 library(tidyverse)
@@ -20,7 +20,7 @@ library(arrow)
 
 # Copy and insert the path to the folder
 #source_folder = "" #Insert path here
-source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
+source_folder = "C:/Users/Dennis Netchitailo/Documents/air-raids"
 
 load_csv <- function(file_name, base_folder = source_folder) {
   file_path <- file.path(base_folder, file_name)
@@ -47,14 +47,6 @@ cleaned_casualties_data$proportion_killed <-
 # Handle cases where total_casualties is zero to avoid division by zero
 cleaned_casualties_data$proportion_killed[cleaned_casualties_data$total_casualties == 0] <- NA
 
-# Create dummy variable for Killed
-cleaned_casualties_data$has_killed <- ifelse(cleaned_casualties_data$killed > 0, 1, 0)
-
-# Create dummy variable for Injured
-cleaned_casualties_data$has_injured <- ifelse(cleaned_casualties_data$injured > 0, 1, 0)
-
-# Create dummy variable for Casualties
-cleaned_casualties_data$has_casualties <- ifelse(cleaned_casualties_data$total_casualties > 0, 1, 0)
 
 ### BOMBINGS Dataset ###
 
@@ -64,25 +56,17 @@ cleaned_bombings_data$bombing_id <- as.integer(cleaned_bombings_data$bombing_id)
 # Remove whitespace before/after 
 cleaned_bombings_data$location <- trimws(cleaned_bombings_data$location)
 
-# Duration of bombing in days 
-cleaned_bombings_data$duration_days <- 
-  as.Date(cleaned_bombings_data$end_date) - as.Date(cleaned_bombings_data$start_date) + 1
-
 # Year of occurrence
 cleaned_bombings_data$start_year <- format(as.Date(cleaned_bombings_data$start_date), "%Y")
 
 # Month of occurrence
 cleaned_bombings_data$start_month <- format(as.Date(cleaned_bombings_data$start_date), "%m")
 
-# Dummy for missing coordinates
-cleaned_bombings_data$has_missing_coords <- 
-  ifelse(is.na(cleaned_bombings_data$lon) | is.na(cleaned_bombings_data$lat), 1, 0)
-
-# Dummy for unknown time
-cleaned_bombings_data$time_unknown <- ifelse(is.na(cleaned_bombings_data$time), 1, 0)
-
 # Drop additional notes column
 cleaned_bombings_data <- cleaned_bombings_data %>% select(-additional_notes)
+
+# Drop start_date
+cleaned_bombings_data <- cleaned_bombings_data %>% select(-start_date)
 
 #### Save data ####
 write_csv(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.csv")
@@ -106,14 +90,10 @@ aggregated_bombings <- bombings_data %>%
     total_incidents = n(),
     civil_defense_region = first(civil_defence_region),
     country = first(country),
-    start_date = first(start_date),
-    end_date = first(end_date),
     time = first(time),
-    duration_days = first(duration_days),
     start_year = first(start_year),
     start_month = first(start_month),
-    time_unknown = first(time_unknown),
-    .groups = "drop"
+        .groups = "drop"
   )
 
 combined_data <- aggregated_bombings %>%
@@ -148,19 +128,43 @@ cleaned_data <- combined_data %>%
                          ifelse(time == "Day", 0, NA))
   )
 
+combined_data <- cleaned_data
+
 # Remove rows with NA except for 'proportion_killed'
 cleaned_data <- combined_data %>%
-  filter(if_all(everything(), ~ !is.na(.) | cur_column() == "proportion_killed"))
+  filter(if_all(-proportion_killed, ~ !is.na(.)))
 
-# Verify the result
-summary(cleaned_data)
-
-
-
-# View the cleaned dataset
-head(cleaned_data)
 
 combined_data <- cleaned_data
+
+# Define thresholds for lethality categories
+combined_data <- combined_data %>%
+  mutate(lethality_category = case_when(
+    proportion_killed < 0.33 ~ "low",
+    proportion_killed >= 0.33 & proportion_killed < 0.66 ~ "medium",
+    proportion_killed >= 0.66 ~ "high",
+    TRUE ~ "None"  # Handle NAs
+  ))
+
+# Convert to factor for modeling
+combined_data$lethality_category <- factor(combined_data$lethality_category, 
+                                           levels = c("low", "medium", "high"))
+
+# Remove unneeded column proportion_killed
+combined_data <- combined_data %>%
+  select(-proportion_killed)
+
+# Remove unneeded column time
+combined_data <- combined_data %>%
+  select(-time)
+
+# Rename columns start_year and start_month
+combined_data <- combined_data %>%
+  rename(
+    year = start_year,
+    month = start_month
+  )
+
 
 ## Save Data ##
 write_csv(combined_data, "data/02-analysis_data/combined_data.csv")
