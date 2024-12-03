@@ -20,7 +20,6 @@ library(arrow)
 
 # Copy and insert the path to the folder
 #source_folder = "" #Insert path here
-source_folder = "C:/Users/Dennis Netchitailo/Documents/air-raids"
 
 load_csv <- function(file_name, base_folder = source_folder) {
   file_path <- file.path(base_folder, file_name)
