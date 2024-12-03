@@ -92,14 +92,12 @@ The two datasets that were used to make the single dataset that provided the dat
 
 ## Outcome variables
 
-Add graphs, tables and text. Use sub-sub-headings for each outcome variable or update the subheading to be singular.
-
 The outcome variable is **`total_casualties`**. This is the primary dependent variable that the model is designed to predict. It represents the number of people killed or injured by air raids. The model seeks to identify the variables affecting this number. 
 
-@fig-expectancy visualizes the distribution of life expectancy from 2015 to 2020 as percentages, combining a histogram and a density plot. A large concentration of observations is observed range of 0% to 25%, reflecting a significant proportion of countries with lower life expectancy relative to others in the dataset. Another visible concentration is around 75% to 100%, indicating a group of countries with relatively high life expectancy. The blue density curve overlays the histogram, providing a smoothed representation of the distribution. Peaks in the curve correspond to high frequency within the histogram. The density plot emphasized the bimodal nature of the distribution with two distinct peaks: one around 12 as low life expectancy percentages; another peak around 87as high life expectancy percentage. 
+@fig-monthdistribution visualizes the distribution of casualties from 1939 to 1945 on a monthly basis in a histogram.
 
 ```{r}
-#| label: fig-timesdistribution
+#| label: fig-monthdistribution
 #| fig-cap: "Distribution of casualties in the UK caused by air raids throughout the war."
 #| echo: false
 #| eval: true
@@ -115,28 +113,59 @@ ggplot(combined_data, aes(x = factor(start_month), y = total_casualties, fill = 
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-
-
-
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
+A large number of casualties occurred in the last months of 1940 and the first months of 1941. This coincides with "The Blitz", the name given to the most intense period of air raids on the UK, following the defeat of France in June 1940. The number of casualties rises month to month following the defeat of the Allies in western Europe, as Germany could concentrate its airforce on bombing the United Kingdom.
 
 ```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
+#| label: fig-yeardistribution
+#| fig-cap: "Distribution of casualties in the UK caused by air raids throughout the war."
 #| echo: false
+#| eval: true
 #| warning: false
 #| message: false
-
-analysis_data <- read_csv(here::here("data/02-analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
+# Create the histogram plot
+ggplot(combined_data, aes(x = factor(start_year), y = total_casualties)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  scale_x_discrete(name = "Year") +
+  scale_y_continuous(name = "Total Casualties") +
+  labs(title = "Total Casualties by Year (1939-1945)") +
   theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
+  theme(axis.text.x = element_text(angle = 0, hjust = 0.5))
 ```
+@fig-yeardistribution shows that 
+
+summary_data
+
+```{r}
+#| label: fig-yeardistribution
+#| fig-cap: "Distribution of casualties in the UK caused by air raids throughout the war."
+#| echo: false
+#| eval: true
+#| warning: false
+#| message: false
+# Create the histogram plot
+# Create the dual-axis plot
+ggplot(combined_data, aes(x = factor(start_year))) +
+  geom_bar(aes(y = total_casualties), stat = "identity", fill = "steelblue", alpha = 0.7) +
+  geom_line(aes(y = total_incidents * (max(total_casualties) / max(total_incidents)), group = 1), 
+            color = "darkred", size = 1) +
+  geom_point(aes(y = total_incidents * (max(total_casualties) / max(total_incidents))), 
+             color = "darkred", size = 2) +
+  scale_y_continuous(
+    name = "Total Casualties",
+    sec.axis = sec_axis(~ . * (max(combined_data$total_incidents) / max(combined_data$total_casualties)), 
+                        name = "Number of Incidents")
+  ) +
+  labs(title = "Total Casualties and Number of Incidents by Year (1939-1945)", 
+       x = "Year") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 0, hjust = 0.5),
+    axis.title.y.right = element_text(color = "darkred"),
+    axis.text.y.right = element_text(color = "darkred")
+  )
+```
+
+
 
 Talk way more about it. 
 
@@ -149,8 +178,13 @@ Use sub-sub-headings for each outcome variable and feel free to combine a few in
 
 The **predictor variables** are the factors that are assumed to influence the number of casualties. 
 
-1. **Civil Defense Region ('civil_defense_region')**: is a factor because different military regions differed in their capabilities to prevent and to respond to air raids. 
+1. **Time ('time_binary')**. This variable represents whether an incident occurred during daytime, defined as between 6AM and 6PM, or nighttime, defined as between 6PM and 6AM. The assumption here is that the response time of medical, military, and police services differs at night, given more people at rest (implying worse response time), but also less traffic (implying faster response time). This is the key variable being assessed, given 
 
+2. **Country ('country')** is a factor, because each country's cultural, social, and economic conditions can influence how much damage an air raid has by influencing factors such as the the abundance of underground shelter (such as the London Underground) or the quality of building construction (making a structure more or less susceptible to collapse). 
+
+3. **Date ('start_year') and ('start_month')** is a factor because over time, technology and capabilities changed for both sides in the war. Equally, seasonal effects may have played a role. For instance, in wintertime, it is possible that there could have been cases of frostbite caused by the destruction of shelter and heating infrastructure. 
+
+4. **Civil Defense Region ('civil_defense_region')**: is a factor because different military regions differed in their capabilities to prevent and to respond to air raids, as well as in intensity of targeting by the German airforce.  
 
 
 # Model
@@ -195,7 +229,7 @@ Our results are summarized in @tbl-modelresults.
 library(rstanarm)
 
 first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
+  readRDS(file = here::here("STA304P3/models/refined_model.rds"))
 ```
 
 ```{r}

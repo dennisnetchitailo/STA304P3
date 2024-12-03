@@ -10,7 +10,7 @@
   # - The `rstanarm` package must be installed and loaded
   # - The `ggplot2` package must be installed and loaded
   # - The `brms` package must be installed and loaded
-
+  # - The `broom.mixed` package must be installed and loaded
 # Any other information needed? [...UPDATE THIS...]
 
 
@@ -20,7 +20,7 @@ library(rstanarm)
 library(dplyr)
 library(ggplot2)
 library(brms)
-
+library(broom.mixed)
 
 source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
 
@@ -29,6 +29,15 @@ load_csv <- function(file_name, base_folder = source_folder) {
   data <- read.csv(file_path)
   return(data)
 }
+
+rtools_path <- "C:/RBuildTools/4.4"
+path_to_usr_bin <- file.path(rtools_path, "usr/bin")
+path_to_mingw_bin <- file.path(rtools_path, "mingw_64/bin")
+Sys.setenv(PATH = paste(Sys.getenv("PATH"), path_to_usr_bin, path_to_mingw_bin, sep = .Platform$path.sep))
+Sys.setenv(R_BUILD_TOOLS_PATH = "C:/RTools")
+Sys.which("make")
+
+
 
 #### Load Datasets ####
 
@@ -169,7 +178,9 @@ ggplot(combined_data, aes(x = as.factor(time_binary), y = total_casualties)) +
   labs(x = "Time (0 = Day, 1 = Night)", y = "Total Casualties") +
   theme_minimal()
 
+### Models ###
 
+options(mc.cores = parallel::detectCores())
 # Fit a Zero-Inflated Negative Binomial model
 zero_inflated_model <- brm(
   formula = total_casualties ~ time_binary + (1 | casualty_group),  # Add random effects if needed
@@ -204,18 +215,76 @@ ggplot(combined_data, aes(x = time_binary, y = total_casualties)) +
   theme_minimal()
 
 
+refined_model <- brm(
+  total_casualties ~ time_binary + severity + population_density + 
+    (1 | casualty_group) + (1 | civil_defense_region),
+  data = combined_data,
+  family = zero_inflated_negbinomial(),
+  prior = c(
+    prior(normal(0, 1), class = "b"),
+    prior(exponential(1), class = "sd")
+  ),
+  chains = 4,
+  cores = parallel::detectCores(),
+  iter = 2000
+)
+## New Model ___________________________________________________________________
 
-# __________________________________________________________________
-first_model <-
-  stan_glm(
-    formula = flying_time ~ length + width,
-    data = analysis_data,
-    family = gaussian(),
-    prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_aux = exponential(rate = 1, autoscale = TRUE),
-    seed = 853
-  )
+## New Model ___________________________________________________________________
+## New Model ___________________________________________________________________
+
+## New Model ___________________________________________________________________
+
+## New Model ___________________________________________________________________
+library(brms)
+
+# Refined model using additional variables
+refined_model <- brm(
+  total_casualties ~ 
+    start_year + start_month + time_binary + country + civil_defense_region + 
+    (1 | casualty_group) + (1 | civil_defense_region),
+  data = combined_data,
+  family = zero_inflated_negbinomial(),
+  prior = c(
+    prior(normal(0, 1), class = "b"),
+    prior(exponential(1), class = "sd")
+  ),
+  chains = 4,
+  cores = parallel::detectCores(),
+  iter = 2000
+)
+
+saveRDS(
+  refined_model,
+  file = "models/refined_model.rds"
+)
+
+## New Model ___________________________________________________________________
+## New Model ___________________________________________________________________
+## New Model ___________________________________________________________________
+## New Model ___________________________________________________________________
+## New Model ___________________________________________________________________
+
+#Partial Effects
+plot(marginal_effects(refined_model), points = TRUE)
+# Posterior Predictive Checks:
+pp_check(refined_model, ndraws = 100)
+#Predicted Casualties by Month and Time:
+combined_data$predicted <- posterior_epred(refined_model)
+
+ggplot(combined_data, aes(x = start_month, y = predicted, color = time_binary)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "loess") +
+  facet_wrap(~ country) +
+  labs(title = "Predicted Casualties by Month and Time",
+       x = "Month",
+       y = "Predicted Casualties") +
+  theme_minimal()
+
+
+
+#___________________________________________________________________
+
 
 
 #### Save model ####

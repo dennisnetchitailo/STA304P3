@@ -148,6 +148,14 @@ cleaned_data <- combined_data %>%
                          ifelse(time == "Day", 0, NA))
   )
 
+# Remove rows with NA except for 'proportion_killed'
+cleaned_data <- combined_data %>%
+  filter(if_all(everything(), ~ !is.na(.) | cur_column() == "proportion_killed"))
+
+# Verify the result
+summary(cleaned_data)
+
+
 
 # View the cleaned dataset
 head(cleaned_data)
