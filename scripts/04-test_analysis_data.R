@@ -56,64 +56,27 @@ test_that("country is of class character", {
   expect_type(combined_data$country, "character")
 })
 
-test_that("start_date is of class double", {
-  expect_type(combined_data$start_date, "double")
+
+test_that("year is of class double", {
+  expect_type(combined_data$year, "double")
 })
 
-test_that("end_date is of class Date", {
-  expect_s3_class(combined_data$end_date, "Date")
+test_that("year values are within the range 1939-1945, ignoring NAs", {
+  expect_true(all(combined_data$year >= 1939 & combined_data$year <= 1945, na.rm = TRUE))
 })
 
-test_that("time is of class character", {
-  expect_type(combined_data$time, "character")
+test_that("month is of class double", {
+  expect_type(combined_data$month, "double")
 })
 
-test_that("duration_days is of class double", {
-  expect_type(combined_data$duration_days, "double")
+test_that("month values are within the range 1-12, ignoring NAs", {
+  expect_true(all(combined_data$month >= 1 & combined_data$month <= 12, na.rm = TRUE))
 })
 
-test_that("start_year is of class double", {
-  expect_type(combined_data$start_year, "double")
-})
-
-test_that("start_year values are within the range 1939-1945, ignoring NAs", {
-  expect_true(all(combined_data$start_year >= 1939 & combined_data$start_year <= 1945, na.rm = TRUE))
-})
-
-test_that("start_month is of class double", {
-  expect_type(combined_data$start_month, "double")
-})
-
-test_that("start_month values are within the range 1-12, ignoring NAs", {
-  expect_true(all(combined_data$start_month >= 1 & combined_data$start_month <= 12, na.rm = TRUE))
-})
-
-test_that("time_unknown is of class double", {
-  expect_type(combined_data$time_unknown, "double")
-})
-
-#### Additional Tests ####
-
-# # Test proportion_killed is between 0 and 1
-# test_that("proportion_killed values are between 0 and 1, ignoring NAs", {
-#   expect_true(all(combined_data$proportion_killed >= 0 & combined_data$proportion_killed <= 1, na.rm = TRUE))
-# })
-
-test_that("proportion_killed values are between 0 and 1, ignoring NAs", {
-  # Ensure the proportion is within range for non-NA values
-  expect_true(all(combined_data$proportion_killed >= 0 & combined_data$proportion_killed <= 1, na.rm = TRUE))
-})
-
-
-# Test presence of boolean flags
-test_that("has_killed is of class double", {
-  expect_type(combined_data$has_killed, "double")
-})
-
-test_that("has_injured is of class double", {
-  expect_type(combined_data$has_injured, "double")
-})
-
-test_that("has_casualties is of class double", {
-  expect_type(combined_data$has_casualties, "double")
+test_that("lethality_category contains valid values", {
+  # Define the allowed categories
+  allowed_categories <- c(NA, "low", "medium", "high")
+  
+  # Check that all values in lethality_category are in the allowed categories
+  expect_true(all(combined_data$lethality_category %in% allowed_categories))
 })
