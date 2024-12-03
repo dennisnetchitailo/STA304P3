@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
+# Purpose: Models the combined_data dataset 
 # Author: Dennis Netchitailo
 # Date: 30 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
@@ -11,7 +11,7 @@
   # - The `ggplot2` package must be installed and loaded
   # - The `brms` package must be installed and loaded
   # - The `broom.mixed` package must be installed and loaded
-# Any other information needed? [...UPDATE THIS...]
+# Any other information needed? No.
 
 
 #### Workspace setup ####
@@ -22,7 +22,7 @@ library(ggplot2)
 library(brms)
 library(broom.mixed)
 
-source_folder = "C:/Users/Dennis Netchitailo/Documents/STA304P3"
+source_folder = "" # Insert local path here
 
 load_csv <- function(file_name, base_folder = source_folder) {
   file_path <- file.path(base_folder, file_name)
