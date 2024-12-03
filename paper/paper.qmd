@@ -4,8 +4,7 @@ subtitle: "My subtitle if needed"
 author: 
   - Dennis Netchitailo
 thanks: "Code and data are available at: 
-[https://github.com/dennisnetchitailo/STA304P3]
-(https://github.com/tacookson/data/tree/master/britain-bombing-ww2)."
+[https://github.com/dennisnetchitailo/STA304P3](https://github.com/dennisnetchitailo/STA304P3)."
 date: 2 December 2024
 date-format: long
 abstract: "This study models the German bombing campaign of Britain during the Second World War by analyzing the data collected by the Home Security War Room from 1939 to 1945 to summarise air raid damage. I use a multiple linear regression model to estimate the impact of the time an attack occurred on casualties."
@@ -37,6 +36,7 @@ library(brms)
 # Introduction
 
 ////Overview paragraph////
+On September 1st, 1939, the German armed forces crossed the Polish border. The United Kingdom declared war on Germany on September 3rd, 1939. 
 The Ministry of Home Security was the British government department established in 1939 to direct the response to German air raids. Part of its responsibility was tracking data related to air raids. This data  
 
 
@@ -58,7 +58,7 @@ Telegraphing paragraph: The remainder of this paper is structured as follows. @s
 
 ## Overview
 
-We use the statistical programming language R [@citeR].... Our data [@shelter].... Following @tellingstories, we consider...
+I used the statistical programming language R [@citeR].... Our data [@shelter].... Following @tellingstories, we consider...
 
 Overview text
 
