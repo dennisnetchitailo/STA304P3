@@ -29,26 +29,27 @@ library(rstanarm)
 library(ggplot2)
 library(brms)
 
+#| include: false
+setwd(here::here())  # Sets the working directory to the root of the project
+
+combined_data <- read.csv("data/02-analysis_data/combined_data.csv")
 ```
 
 
 # Introduction
 
-////Overview paragraph////
 On September 1st, 1939, the German armed forces crossed the Polish border. The United Kingdom declared war on Germany on September 3rd, 1939. 
-The Ministry of Home Security was the British government department established in 1939 to direct the response to German air raids. Part of its responsibility was tracking data related to air raids. This data  
+The Ministry of Home Security was the British government department established in 1939 to direct the response to German air raids. Part of its responsibility was tracking data related to air raids. This data found more than 66 thousand people and 221 thousand people had been killed or injured by Germany's air campaign against the UK. Approximately 0.7% of the UK's 1939 population of 41.46 million would be killed or injured by air raids between 1939 to 1945. 
+With 32 000 incidents, there were an average of 10 casualties per incident, including 2 killed and 8 injured. Yet, there is great variation. Some incidents resulted in hundreds of casualties. While many others resulted in zero casualties. Understanding what factors lead to such drastic differences, often ascribed to luck, is key.
 
 
-////Estimand paragraph////
-The estimand is the number of casualties sustained during an attack. I use the Home Security data with a multiple linear regression model to estimate the difference in casualties during nighttime air raids compared to daytime air raids 
+The estimand is the number of casualties sustained during an attack. I use the Home Security data with a multiple linear regression model to estimate the difference in casualties during nighttime air raids compared to daytime air raids.
 
-////Results paragraph////
+This paper's goal is to try to develop a model that predicts casualties based on the time of an air raid by controlling for multiple variables: country, military region, time, date, and the number of incidents occurring.
 
-////Why it matters paragraph////
+The analysis of this data can help countries facing war, especially as it relates to missile or airstrikes, better understand how to allocate resources to deal with casualties.
 
-Telegraphing paragraph: The remainder of this paper is structured as follows. @sec-data....
-
-
+The paper is structured as follows: @sec-data discusses the data and data cleaning process, followed by the analysis of key variables and relationships in @sec-model. @sec-results then presents the results from the model, followed by a discussion of the implications of these findings in @sec-discussion. @sec-discussion also concludes with suggestions for future research and practical applications of the model.
 
 
 
@@ -57,33 +58,22 @@ Telegraphing paragraph: The remainder of this paper is structured as follows. @s
 
 ## Overview
 
-This study uses the [@airraids]
+This study uses the [@airraids] dataset to study the relationship between variables such as time to casualties.
 
-I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were **`tidyverse`** for data manipulation and visualization [@tidyverse], **`here`** for file path management [@here], **`lubridate`** for date handling [@lubridate], **`arrow`** for data storage and processing [@arrow], **`testthat`** for unit testing [@testthat], **`readr`** for reading structured data [@readr], **`dplyr`** for data manipulation [@dplyr], **`stringr`** for string operations [@stringr], **`ggplot2`** for creating visualizations [@ggplot2], **`caret`** for modeling [@caret], **`kableExtra`** for creating tables [@kableExtra], and **`modelsummary`** for summarizing models and results [@modelsummary].
+I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were **usethis** for file paths [@usethis], **`tidyverse`** for data manipulation and visualization [@tidyverse], **`here`** for file path management [@here], **`lubridate`** for date handling [@lubridate], **`arrow`** for data storage and processing [@arrow], **`testthat`** for unit testing [@testthat], **`readr`** for reading structured data [@readr], **`dplyr`** for data manipulation [@dplyr], **`stringr`** for string operations [@stringr], **`ggplot2`** for creating visualizations [@ggplot2], **`brms`** for modeling [@brms], and **`modelsummary`** for summarizing models and results [@modelsummary].
 
-.... Our data [@airraids].... Following @tellingstories, we consider...
-
-arrow /
-here / 
-readr /
-usethis
-dplyr / 
-testthat / 
-rstanarm
-ggplot2 /
-brms
 
 ## Measurement
 	
 The measurement process refers to the attempt to explain real world events through data, such as an individual act of warfare, as represented by the use of a self-propelled (missile) or gravity released explosive (bomb) to strike land or sea target, into numerical entries describing this event. Each entry in the dataset represents a bombing incident that took place in the UK during WW2. 
 	
 **Country**: The country where an incident occurred. This includes England, Scotland, Wales, Northern Ireland, and the Channel Islands. 
-**Location**: 
 **Civil Defense Region**: A region defined by the military for purposes of organization. The United Kingdom was divided into 13 regions. 
 **Coordinates: Longitude and Latitude**: The location of an incident as recorded by the mercator projection.  
-**Date: Start & End**: The date an incident started and ended at a specific location. 
+**Date: Year & Month**: The year & month an incident occurred at a specific location. 
 **Time** The time of day an incident occurred. Day is defined as being between 6AM and 6PM. Night is defined as being between 6PM and 6AM. 
-**Casualties: Killed, Injured, Total**: The number of people killed or injured due to an incident. Total casualties is the sum of the number killed and injured in the same incident. 
+**Casualties: Killed, Injured, Total**: The number of people killed or injured due to an incident. Total casualties is the sum of the number killed and injured in the same incident.
+**Lethality**: the proportion of casualties that were killed. 
 
 ## Data Cleaning
 The two datasets that were used to make the single dataset that provided the data for the analysis were cleaned to ensure accuracy and consistency.  Missing values were dealt with by removing them from the analysis. Variables were converted into logical data types. Unneeded columns were removed. The two cleaned datasets were unified into one. 
@@ -105,7 +95,7 @@ The outcome variable is **`total_casualties`**. This is the primary dependent va
 #| message: false
 
 # Create the histogram plot
-ggplot(combined_data, aes(x = factor(start_month), y = total_casualties, fill = as.factor(start_year))) +
+ggplot(combined_data, aes(x = factor(month), y = total_casualties, fill = as.factor(year))) +
   geom_bar(stat = "identity", position = "dodge") +
   scale_x_discrete(name = "Month") +
   scale_y_continuous(name = "Total Casualties") +
@@ -114,6 +104,7 @@ ggplot(combined_data, aes(x = factor(start_month), y = total_casualties, fill = 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 A large number of casualties occurred in the last months of 1940 and the first months of 1941. This coincides with "The Blitz", the name given to the most intense period of air raids on the UK, following the defeat of France in June 1940. The number of casualties rises month to month following the defeat of the Allies in western Europe, as Germany could concentrate its airforce on bombing the United Kingdom.
+Based on this graph, a seasonal trend is not observed. 
 
 ```{r}
 #| label: fig-yeardistribution
@@ -123,7 +114,7 @@ A large number of casualties occurred in the last months of 1940 and the first m
 #| warning: false
 #| message: false
 # Create the histogram plot
-ggplot(combined_data, aes(x = factor(start_year), y = total_casualties)) +
+ggplot(combined_data, aes(x = factor(year), y = total_casualties)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   scale_x_discrete(name = "Year") +
   scale_y_continuous(name = "Total Casualties") +
@@ -131,87 +122,85 @@ ggplot(combined_data, aes(x = factor(start_year), y = total_casualties)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 0, hjust = 0.5))
 ```
-@fig-yeardistribution shows that 
-
-summary_data
+@fig-yeardistribution reflects the events going on in Europe at the time. In 1939, Germany occupied Poland. In 1940, it turned its attention to the west, and coinciding with the invasion of France, Germany's mass air raids against the UK began. This continued into 1941. In 1941, Germany invaded the Soviet Union, redirecting Germany's resources to the east. The renewed attention in 1944 coincides with the allied invasion of Normandy. Finally, in 1945, Germany surrended in May. 
 
 ```{r}
-#| label: fig-yeardistribution
+#| label: fig-incidentyeardistribution
 #| fig-cap: "Distribution of casualties in the UK caused by air raids throughout the war."
 #| echo: false
 #| eval: true
 #| warning: false
 #| message: false
-# Create the histogram plot
-# Create the dual-axis plot
-ggplot(combined_data, aes(x = factor(start_year))) +
-  geom_bar(aes(y = total_casualties), stat = "identity", fill = "steelblue", alpha = 0.7) +
-  geom_line(aes(y = total_incidents * (max(total_casualties) / max(total_incidents)), group = 1), 
-            color = "darkred", size = 1) +
-  geom_point(aes(y = total_incidents * (max(total_casualties) / max(total_incidents))), 
-             color = "darkred", size = 2) +
-  scale_y_continuous(
-    name = "Total Casualties",
-    sec.axis = sec_axis(~ . * (max(combined_data$total_incidents) / max(combined_data$total_casualties)), 
-                        name = "Number of Incidents")
-  ) +
-  labs(title = "Total Casualties and Number of Incidents by Year (1939-1945)", 
-       x = "Year") +
+# Create a bar plot showing incidents per year
+ggplot(combined_data, aes(x = factor(year))) +
+  geom_bar(aes(y = total_incidents), stat = "identity", fill = "skyblue", alpha = 0.7) +
+  labs(title = "Total Incidents per Year (1939-1945)", 
+       x = "Year", 
+       y = "Number of Incidents") +
   theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 0, hjust = 0.5),
-    axis.title.y.right = element_text(color = "darkred"),
-    axis.text.y.right = element_text(color = "darkred")
-  )
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for clarity
+
 ```
-
-
-
-Talk way more about it. 
+@fig-incidentyeardistribution reflects the events going on in Europe at the time. In 1939, Germany occupied Poland. In 1940, it turned its attention to the west, and coinciding with the invasion of France, Germany's mass air raids against the UK began. This continued into 1941. In 1941, Germany invaded the Soviet Union, redirecting Germany's resources to the east. The renewed attention in 1944 coincides with the allied invasion of Normandy. Finally, in 1945, Germany surrended in May. 
+As @fig-yeardistribution showed, though there were more casualties in 1941 than in 1940, there were actually more incidents in 1940.
 
 ## Predictor variables
 
-Add graphs, tables and text.
-
-Use sub-sub-headings for each outcome variable and feel free to combine a few into one if they go together naturally.
-
-
 The **predictor variables** are the factors that are assumed to influence the number of casualties. 
 
-1. **Time ('time_binary')**. This variable represents whether an incident occurred during daytime, defined as between 6AM and 6PM, or nighttime, defined as between 6PM and 6AM. The assumption here is that the response time of medical, military, and police services differs at night, given more people at rest (implying worse response time), but also less traffic (implying faster response time). This is the key variable being assessed, given 
+1. **Time ('time_binary')**. This variable represents whether an incident occurred during daytime, defined as between 6AM and 6PM, or nighttime, defined as between 6PM and 6AM. The assumption here is that the response time of medical, military, and police services differs at night, given more people at rest (implying worse response time), but also less traffic (implying faster response time). This is the key variable being assessed. 
 
 2. **Country ('country')** is a factor, because each country's cultural, social, and economic conditions can influence how much damage an air raid has by influencing factors such as the the abundance of underground shelter (such as the London Underground) or the quality of building construction (making a structure more or less susceptible to collapse). 
 
-3. **Date ('start_year') and ('start_month')** is a factor because over time, technology and capabilities changed for both sides in the war. Equally, seasonal effects may have played a role. For instance, in wintertime, it is possible that there could have been cases of frostbite caused by the destruction of shelter and heating infrastructure. 
+3. **Date ('year') and ('month')** is a factor because over time, technology and capabilities changed for both sides in the war. Equally, seasonal effects may have played a role. For instance, in wintertime, it is possible that there could have been cases of frostbite caused by the destruction of shelter and heating infrastructure. 
 
 4. **Civil Defense Region ('civil_defense_region')**: is a factor because different military regions differed in their capabilities to prevent and to respond to air raids, as well as in intensity of targeting by the German airforce.  
 
+5. **Casualties ('killed'), ('injured'), ('total_casualties'), and ('lethality_category')**: is a factor that assesses the number and types of casualties, as well as how deadly an air raid was.
 
 # Model
 
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
+The goal of this build a model using R [@citeR] to predict the difference in casualties caused in an incident based on several predictor variables.
 
 ## Model set-up
 
 Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
 
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
+$$difference\_casualties_i​=\beta_0​+s(year_i​)+\beta_1​(month_i)+\beta_3​(time\_binary_i)+\beta_4​(lethality\_category_i)+\beta_5​(country_i)+\beta_6​(civil\_defense\_region_i)+\gamma_1​(1|casualty\_group_i)+\gamma_2​(1|civil\_defense\_region_i)+ ϵ_i​$$
 
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
+I ran the model in R [@citeR] using the `brsm` package of @brms. I used the default priors from `brms`.
+
+Where:
+
+-   $difference\_casualties_i$ is the number of casualties for the i-th incident.
+
+-   $beta_0$ is the intercept term (baseline value when all predictors are zero).
+
+-   $year_i$ is the year the incident occurred in. 
+
+-   $month_i$ is the month the incident occurred in.  
+
+-   $time\_binary_i$  is whether the incident occurred during daytime or nighttime.
+
+-   $lethality\_category_i$​ is how deadly an air raid was.
+
+-   $country_i$​ is the country an incident occurred in.
+
+-   $civil\_defense\_region_i$​ is the military region an incident occurred in.
+
+-   $1|casualty\_group_i$​ is a random intercept term, accounting for variability caused by grouping. 
+
+-   $1|civil\_defense\_region_i$​ is a random intercept term, accounting for variability caused by grouping. 
+
+-   $\epsilon_i$ is the error term, assumed to be normally distributed with a mean of 0 and constant variance $ϵ_i​∼N(0,\sigma^2)$
+
 
 
 ### Model justification
 
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
+The zero-inflated negative binomial distribution was chosen because of the nature of the data. First off, the response variable (total_casualties) is a count with non-negative integers. Secondly, due to the variance being larger than the mean, indicating overdispersion, the Poisson distribution would be innaprpriate, due to its assumption of the mean and variance being equal. The negative binomial distribution accounts for this overdispersion by introducing an additional parameter that models the variance separately from the mean, making it a more flexible choice for this data. Thirdly, relating to the large variance, but low mean, there are many zeros in the data. I.e.: many incidents had zero casualties. But a relatively small number of incidents have dozens, hundreds, or thousands of casualties. This is why the model was chosen to be a zero-inflated binomial distribution, to take into account the excess number of zeros. 
+
+Other models such as a linear regression were considered, but deemed not to be suited to the characteristics of this dataset: data being a count, over-dispersion, excess zeros. 
 
 We can use maths by including latex between dollar signs, for instance $\theta$.
 
@@ -226,29 +215,16 @@ Our results are summarized in @tbl-modelresults.
 #| warning: false
 #| message: false
 
-library(rstanarm)
+library(modelsummary)
+
+# Summarize the first model
+modelsummary(first_model, 
+             statistic = c("estimate", "std.error", "conf.low", "conf.high")
+
 
 first_model <-
-  readRDS(file = here::here("STA304P3/models/refined_model.rds"))
+  readRDS(file = here::here("air-raids/models/first_model.rds"))
 ```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-
 
 
 # Discussion
@@ -265,13 +241,57 @@ Please don't use these as sub-heading labels - change them to be what your point
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
 
 \newpage
 
 \appendix
 
 # Appendix {-}
+
+# Idealized Survey
+Purpose: better understand the human and economic impact. 
+
+Provide details regarding each (sub)question.
+
+Q1 - What was the location of air raid?
+
+(a) Country
+
+(b) Civil Defense region
+
+(c) Longitude and Latitude 
+
+(d) Municipality
+  
+Q2 - When did it occur?
+
+(a) What was the date of the first enemy strike on this location?
+
+(b) In what hour did this strike occur?
+
+Q3 - What casualties are associated with this strike?
+
+  (a) How many people were killed?
+
+  (b) If causes of death are known, list them, and the number associated with each cause.
+
+  (c) How many people were injured?
+
+  (d) If types of injury are known, list them, and the number associated with each cause.
+  
+  (e) If known, what are the ages of the victims?
+  
+  (f) If known, what is the sex of the victims?
+  
+  (g) If known, how many of the casualties were civilians?
+  
+  (h) If known, how many of the casualties were military personnel?
+
+Q4 - What was the economic impact?
+
+  (a) What objects was struck?
+  
+  (b) If any, what damage was sustained by nearby objects?
 
 
 # Additional data details
@@ -280,51 +300,8 @@ Weaknesses and next steps should also be included.
 
 ## Posterior predictive check
 
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
-
 ## Diagnostics
 
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
 
 
 
