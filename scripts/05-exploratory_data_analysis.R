@@ -47,10 +47,6 @@ casualties_analysis_data <- load_csv("data/02-analysis_data/analysis_data_casual
 # Load bombings_data.csv
 bombings_analysis_data <- load_csv("data/02-analysis_data/analysis_data_bombings.csv")
 
-
-#### Read data ####
-#analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
-
 ### Model data ####
 
 ## CASUALTIES DATASET ##
