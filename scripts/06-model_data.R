@@ -23,10 +23,8 @@ library(brms)
 library(broom.mixed)
 
 #### Read data ####
-#model_data <- read_csv("data/analysis_data/combined_data")
-model_data <- read_csv("C:/Users/Dennis Netchitailo/Documents/air-raids/data/02-analysis_data/combined_data.csv")
+model_data <- read_csv("data/analysis_data/combined_data")
 
-#"C:/Users/Dennis Netchitailo/Documents/air-raids/data/02-analysis_data/combined_data.csv"
 
 ### Model data ####
 first_model <- brm(
