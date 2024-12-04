@@ -202,7 +202,6 @@ The zero-inflated negative binomial distribution was chosen because of the natur
 
 Other models such as a linear regression were considered, but deemed not to be suited to the characteristics of this dataset: data being a count, over-dispersion, excess zeros. 
 
-We can use maths by including latex between dollar signs, for instance $\theta$.
 
 
 # Results
@@ -218,12 +217,12 @@ Our results are summarized in @tbl-modelresults.
 library(modelsummary)
 
 # Summarize the first model
-modelsummary(first_model, 
-             statistic = c("estimate", "std.error", "conf.low", "conf.high")
-
-
 first_model <-
-  readRDS(file = here::here("air-raids/models/first_model.rds"))
+  readRDS(file = here::here("models/first_model.rds"))
+
+modelsummary(first_model, 
+             statistic = c("estimate", "std.error", "conf.low", "conf.high"))
+
 ```
 
 
