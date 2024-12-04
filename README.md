@@ -19,4 +19,4 @@ The repo is structured as:
 
 ## Statement on LLM usage
 
-Aspects of the code were written with the help of the auto-complete tool, GPT-4. The datasheet was written with the help of GPT-4 and the entire chat history is available in inputs/llms/usage.txt.
+Aspects of the code were written with the help of the auto-complete tool, GPT-4. The datasheet and parts of the analysis was written with the help of GPT-4 and the entire chat history is available in inputs/llms/usage.txt.
