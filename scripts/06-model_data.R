@@ -7,6 +7,9 @@
 # Pre-requisites: --
   # - The `tidyverse` package must be installed and loaded
   # - The `rstanarm` package must be installed and loaded
+  # - The `ggplot2` package must be installed and loaded
+  # - The `brms` package must be installed and loaded
+  # - The `broom.mixed` package must be installed and loaded
 
 # Any other information needed? No.
 
