@@ -58,9 +58,9 @@ The paper is structured as follows: @sec-data discusses the data and data cleani
 
 ## Overview
 
-This study uses the [@airraids] dataset to study the relationship between variables such as time to casualties.
+This study uses the [@britainbombing] dataset to study the relationship between variables such as time to casualties.
 
-I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were **usethis** for file paths [@usethis], **`tidyverse`** for data manipulation and visualization [@tidyverse], **`here`** for file path management [@here], **`lubridate`** for date handling [@lubridate], **`arrow`** for data storage and processing [@arrow], **`testthat`** for unit testing [@testthat], **`readr`** for reading structured data [@readr], **`dplyr`** for data manipulation [@dplyr], **`stringr`** for string operations [@stringr], **`ggplot2`** for creating visualizations [@ggplot2], **`brms`** for modeling [@brms], and **`modelsummary`** for summarizing models and results [@modelsummary].
+I used the statistical programming language R [@citeR] for data cleaning and analysis. The R packages used were **usethis** for file paths [@usethis], **`tidyverse`** for data manipulation and visualization [@tidyverse], **`here`** for file path management [@here], , **`arrow`** for data storage and processing [@arrow], **`testthat`** for unit testing [@testthat], **`readr`** for reading structured data [@readr], **`dplyr`** for data manipulation [@dplyr], , **`ggplot2`** for creating visualizations [@ggplot2], **`brms`** for modeling [@brms], and **`modelsummary`** for summarizing models and results [@modelsummary].
 
 
 ## Measurement
@@ -208,33 +208,13 @@ Other models such as a linear regression were considered, but deemed not to be s
 
 Our results are summarized in @tbl-modelresults.
 
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(modelsummary)
-
-# Summarize the first model
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-
-modelsummary(first_model, 
-             statistic = c("estimate", "std.error", "conf.low", "conf.high"))
-
-```
-
 
 # Discussion
 
 ## First discussion point {#sec-first-point}
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
 
 ## Second discussion point
-
-Please don't use these as sub-heading labels - change them to be what your point actually is.
 
 ## Third discussion point
 
