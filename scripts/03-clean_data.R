@@ -180,6 +180,3 @@ combined_data <- read_csv("data/02-analysis_data/combined_data.csv")
 write_parquet(cleaned_casualties_data, "data/02-analysis_data/analysis_data_casualties.parquet")
 write_parquet(cleaned_bombings_data, "data/02-analysis_data/analysis_data_bombings.parquet")
 write_parquet(combined_data, "data/02-analysis_data/combined_data.parquet")
-
-
-
