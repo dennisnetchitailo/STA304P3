@@ -1,5 +1,5 @@
 #### Preamble ####
-# Purpose: Tests... [...UPDATE THIS...]
+# Purpose: Tests the variables to ensure the proper type and valid values
 # Author: Dennis Netchitailo
 # Date: 29 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
