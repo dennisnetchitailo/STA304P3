@@ -205,37 +205,9 @@ pp_check(zero_inflated_model)
 # Generate predicted values
 combined_data$predicted <- predict(zero_inflated_model)[, "Estimate"]
 
-# Plot actual vs. predicted
-library(ggplot2)
-ggplot(combined_data, aes(x = time_binary, y = total_casualties)) +
-  geom_point(alpha = 0.4) +
-  geom_line(aes(y = predicted), color = "red", size = 1) +
-  labs(x = "Time (0 = Day, 1 = Night)", y = "Total Casualties",
-       title = "Zero-Inflated Model: Total Casualties vs. Time") +
-  theme_minimal()
 
+## Model ___________________________________________________________________
 
-refined_model <- brm(
-  total_casualties ~ time_binary + severity + population_density + 
-    (1 | casualty_group) + (1 | civil_defense_region),
-  data = combined_data,
-  family = zero_inflated_negbinomial(),
-  prior = c(
-    prior(normal(0, 1), class = "b"),
-    prior(exponential(1), class = "sd")
-  ),
-  chains = 4,
-  cores = parallel::detectCores(),
-  iter = 2000
-)
-## New Model ___________________________________________________________________
-
-## New Model ___________________________________________________________________
-## New Model ___________________________________________________________________
-
-## New Model ___________________________________________________________________
-
-## New Model ___________________________________________________________________
 library(brms)
 
 # Refined model using additional variables
@@ -259,10 +231,6 @@ saveRDS(
   file = "models/refined_model.rds"
 )
 
-## New Model ___________________________________________________________________
-## New Model ___________________________________________________________________
-## New Model ___________________________________________________________________
-## New Model ___________________________________________________________________
 ## New Model ___________________________________________________________________
 
 #Partial Effects
