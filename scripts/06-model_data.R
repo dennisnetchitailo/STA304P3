@@ -1,33 +1,45 @@
 #### Preamble ####
-# Purpose: Models... [...UPDATE THIS...]
+# Purpose: Models the effect of time of an air raid on casualties.
 # Author: Dennis Netchitailo
 # Date: 30 November 2024
 # Contact: dennis.netchitailo@mail.utoronto.ca 
 # License: --
-# Pre-requisites: [...UPDATE THIS...]
+# Pre-requisites: --
   # - The `tidyverse` package must be installed and loaded
   # - The `rstanarm` package must be installed and loaded
-# Any other information needed? [...UPDATE THIS...]
+
+# Any other information needed? No.
 
 
 #### Workspace setup ####
 library(tidyverse)
 library(rstanarm)
+library(dplyr)
+library(ggplot2)
+library(brms)
+library(broom.mixed)
 
 #### Read data ####
-analysis_data <- read_csv("data/analysis_data/analysis_data.csv")
+#model_data <- read_csv("data/analysis_data/combined_data")
+model_data <- read_csv("C:/Users/Dennis Netchitailo/Documents/air-raids/data/02-analysis_data/combined_data.csv")
+
+#"C:/Users/Dennis Netchitailo/Documents/air-raids/data/02-analysis_data/combined_data.csv"
 
 ### Model data ####
-first_model <-
-  stan_glm(
-    formula = flying_time ~ length + width,
-    data = analysis_data,
-    family = gaussian(),
-    prior = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_intercept = normal(location = 0, scale = 2.5, autoscale = TRUE),
-    prior_aux = exponential(rate = 1, autoscale = TRUE),
-    seed = 853
-  )
+first_model <- brm(
+  total_casualties ~ 
+    year + month + time_binary + time_binary + lethality_category + country + civil_defense_region + 
+    (1 | casualty_group) + (1 | civil_defense_region),
+  data = combined_data,
+  family = zero_inflated_negbinomial(),
+  prior = c(
+    prior(normal(0, 1), class = "b"),
+    prior(exponential(1), class = "sd")
+  ),
+  chains = 4,
+  cores = 14,  # Use 14 cores for faster computation
+  iter = 2000
+)
 
 
 #### Save model ####
