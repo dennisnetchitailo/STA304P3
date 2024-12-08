@@ -2,9 +2,9 @@
 
 ## Overview
 This repository contains code, data, and supplementary materials for the paper "Air raids on the UK: understanding the effect of time on casualties".  
-In this anaylsis, 
+This paper analyzes data on air raids conducted by Germany on Britain during WW2 to understand what variables, namely time, affected the incidence of casualties during air raid incidents. 
 
-## File Structure
+## File Structure 
 
 The repo is structured as:
 
