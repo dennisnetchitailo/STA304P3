@@ -1,9 +1,8 @@
 # Air raids on the UK: understanding the effect of time on casualties
 
 ## Overview
-
-This repo provides students with a foundation for their own projects associated with *Telling Stories with Data*. You do not need every aspect for every paper and you should delete aspects that you do not need.
-
+This repository contains code, data, and supplementary materials for the paper "Air raids on the UK: understanding the effect of time on casualties".  
+In this anaylsis, 
 
 ## File Structure
 
@@ -16,7 +15,26 @@ The repo is structured as:
 -   `paper` contains the files used to generate the paper, including the Quarto document and reference bibliography file, as well as the PDF of the paper. 
 -   `scripts` contains the R scripts used to simulate, download and clean data.
 
+## Prerequisites for project replication OR to look over the process:
+- Programming Language: R
+  -- Version 4.4.2 or later
+  -- Recommended: use R Studio
+- ~3GB of free space
+- Follow instructions in the preamble
+  -- Download R packages listed as prerequisites in the project files
+  -- run the indicated prerequisite files before running the current file 
+- 
 
 ## Statement on LLM usage
 
 Aspects of the code were written with the help of the auto-complete tool, GPT-4. The datasheet and parts of the analysis was written with the help of GPT-4 and the entire chat history is available in inputs/llms/usage.txt.
+
+## Citation
+If you would like to cite this paper, please cite:
+
+@Manual{airraids,
+title={Air raids on the UK: understanding the effect of time on casualties},
+author={Dennis Netchitailo},
+year={2024},
+url ={https://github.com/dennisnetchitailo/air-raids}
+}
