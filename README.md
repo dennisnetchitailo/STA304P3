@@ -23,7 +23,6 @@ The repo is structured as:
 - Follow instructions in the preamble
   -- Download R packages listed as prerequisites in the project files
   -- run the indicated prerequisite files before running the current file 
-- 
 
 ## Statement on LLM usage
 
